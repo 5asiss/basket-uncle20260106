@@ -6,9 +6,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import pandas as pd
 from io import BytesIO
 from datetime import datetime
-import pandas as pd
-from flask import send_file
-from io import BytesIO
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'basket-uncle-1234'
@@ -21,7 +18,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
     name = db.Column(db.String(50))
-    grade = db.Column(db.String(20), default='RETAIL') # RETAIL(소매) / WHOLESALE(도매)
+    grade = db.Column(db.String(20), default='RETAIL')
     is_admin = db.Column(db.Boolean, default=False)
 
 class Product(db.Model):
@@ -29,7 +26,7 @@ class Product(db.Model):
     name = db.Column(db.String(100))
     price_retail = db.Column(db.Integer)
     price_wholesale = db.Column(db.Integer)
-    category = db.Column(db.String(50)) # 농산물 / 공산품
+    category = db.Column(db.String(50))
     is_active = db.Column(db.Boolean, default=True)
 
 class Order(db.Model):
@@ -48,8 +45,7 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# --- 화면 경로(Route) 설정 ---
-
+# --- 화면 경로 설정 ---
 @app.route('/')
 def index():
     products = Product.query.filter_by(is_active=True).all()
@@ -63,7 +59,7 @@ def register():
             email=request.form['email'],
             password=hashed_pw,
             name=request.form['name'],
-            grade='RETAIL' # 기본은 소매회원
+            grade='RETAIL'
         )
         db.session.add(new_user)
         db.session.commit()
@@ -80,6 +76,7 @@ def login():
     return render_template('login.html')
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
@@ -87,22 +84,35 @@ def logout():
 @app.route('/admin/excel')
 @login_required
 def download_excel():
-    if not current_user.is_admin: return "권한 없음"
+    if not current_user.is_admin:
+        return "권한 없음"
     orders = Order.query.all()
-    df = pd.DataFrame([{
-        "주문ID": o.id, "상품명": o.product_name, "금액": o.total_price, "날짜": o.created_at
-    } for o in orders])
+    order_list = []
+    for o in orders:
+        order_list.append({
+            "주문ID": o.id, 
+            "상품명": o.product_name, 
+            "금액": o.total_price, 
+            "날짜": o.created_at
+        })
+    df = pd.DataFrame(order_list)
     output = BytesIO()
-    df.to_excel(output, index=False)
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False)
     output.seek(0)
     return send_file(output, download_name="orders.xlsx", as_attachment=True)
 
-# 처음 실행 시 DB와 관리자 계정 생성
+# 초기화 함수
 def init_db():
     with app.app_context():
         db.create_all()
         if not User.query.filter_by(email='admin@test.com').first():
-            admin = User(email='admin@test.com', password=generate_password_hash('1234'), name='관리자', is_admin=True)
+            admin = User(
+                email='admin@test.com', 
+                password=generate_password_hash('1234'), 
+                name='관리자', 
+                is_admin=True
+            )
             p1 = Product(name='감자 1kg', price_retail=5000, price_wholesale=4000, category='농산물')
             db.session.add(admin)
             db.session.add(p1)
@@ -111,39 +121,3 @@ def init_db():
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
-    @app.route('/admin/orders/excel')
-@login_required
-def download_orders_excel():
-    # 1. 관리자인지 확인
-    if not current_user.is_admin:
-        return "관리자만 접근 가능합니다."
-
-    # 2. DB에서 모든 주문 데이터 가져오기
-    orders = Order.query.order_by(Order.created_at.desc()).all()
-
-    # 3. 엑셀에 들어갈 데이터 정리
-    order_data = []
-    for o in orders:
-        order_data.append({
-            "주문번호": o.id,
-            "상품명": o.product_name,
-            "결제금액": o.total_price,
-            "주문시간": o.created_at.strftime('%Y-%m-%d %H:%M'),
-            "회원ID": o.user_id
-        })
-
-    # 4. 판다스(Pandas)를 이용해 엑셀 파일로 변환
-    df = pd.DataFrame(order_data)
-    
-    # 메모리상에 파일 생성 (서버에 파일을 저장하지 않아 깔끔함)
-    output = BytesIO()
-    with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='주문리스트')
-    output.seek(0)
-
-    # 5. 사용자에게 파일 전송
-    return send_file(
-        output,
-        download_name=f"바구니삼촌_주문내역_{datetime.now().strftime('%Y%m%d')}.xlsx",
-        as_attachment=True
-    )
