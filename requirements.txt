@@ -1,7 +1,0 @@
-flask
-flask_sqlalchemy
-flask_login
-pandas
-openpyxl
-werkzeug
-gunicorn
