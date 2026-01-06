@@ -120,6 +120,23 @@ def init_db():
             db.session.add(p1)
             db.session.commit()
 
+# 기존 맨 아래 부분을 지우고 이걸로 교체하세요
+with app.app_context():
+    db.create_all()  # 테이블이 없으면 새로 생성
+    # 관리자 계정이 없으면 생성
+    if not User.query.filter_by(email='admin@test.com').first():
+        admin = User(
+            email='admin@test.com', 
+            password=generate_password_hash('1234'), 
+            name='관리자', 
+            is_admin=True
+        )
+        # 테스트용 상품 하나 추가 (테이블이 비어있으면 에러 날 수 있음)
+        p1 = Product(name='감자 1kg', price_retail=5000, price_wholesale=4000, category='농산물')
+        db.session.add(admin)
+        db.session.add(p1)
+        db.session.commit()
+        print("DB 초기화 완료!")
+
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)
