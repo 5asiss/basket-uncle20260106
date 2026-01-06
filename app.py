@@ -102,7 +102,40 @@ def download_excel():
         df.to_excel(writer, index=False)
     output.seek(0)
     return send_file(output, download_name="orders.xlsx", as_attachment=True)
+# --- [관리자 전용: 상품 관리 페이지] ---
+@app.route('/admin/products')
+@login_required
+def admin_products():
+    if not current_user.is_admin: return "권한 없음"
+    products = Product.query.all()
+    return render_template('admin_products.html', products=products)
 
+# --- [관리자 전용: 상품 등록 처리] ---
+@app.route('/admin/product/add', methods=['POST'])
+@login_required
+def add_product():
+    if not current_user.is_admin: return "권한 없음"
+    
+    new_p = Product(
+        name = request.form['name'],
+        price_retail = int(request.form['price_retail']),
+        price_wholesale = int(request.form['price_wholesale']),
+        category = request.form['category'],
+        is_active = True
+    )
+    db.session.add(new_p)
+    db.session.commit()
+    return redirect(url_for('admin_products'))
+
+# --- [관리자 전용: 상품 삭제 처리] ---
+@app.route('/admin/product/delete/<int:id>')
+@login_required
+def delete_product(id):
+    if not current_user.is_admin: return "권한 없음"
+    p = Product.query.get(id)
+    db.session.delete(p)
+    db.session.commit()
+    return redirect(url_for('admin_products'))
 # --- [4단계] 서버 실행 및 초기화 ---
 with app.app_context():
     db.create_all()

@@ -67,8 +67,24 @@
         {% endif %}
 
     </div> 
-    <div class="product-grid">
-        {# ... 이 아래 상품 목록 코드는 그대로 두시면 됩니다 ... #}
+  {% if current_user.is_admin %}
+    <div style="max-width: 1000px; margin: 40px auto; padding: 20px; border-top: 2px dashed #ccc; text-align: center;">
+        <h3 style="color: #34495e;">🛠️ 관리자 전용 마당</h3>
+        <p style="color: #7f8c8d; font-size: 14px;">관리자님, 여기서 상품을 관리하고 장부를 확인하세요.</p>
+        
+        <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+            <a href="/admin/products" style="background-color: #34495e; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
+                📦 상품 등록 및 수정
+            </a>
 
+            <a href="/admin/excel" style="background-color: #27ae60; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
+                📥 주문장 엑셀 받기
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+</body>
+</html>
 </body>
 </html>
