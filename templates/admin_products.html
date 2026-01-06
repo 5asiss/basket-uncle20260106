@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>바구니삼촌 - 상품관리</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        .admin-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background: #eee; }
+        input, select { padding: 8px; margin-right: 10px; }
+        .btn-add { background: #2ecc71; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .btn-del { color: red; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h2>🛠️ 바구니삼촌 상품 관리실</h2>
+    <a href="/">홈으로 돌아가기</a> | <a href="/admin/excel">엑셀 다운로드</a>
+    <hr>
+
+    <div class="admin-box">
+        <h3>➕ 새 상품 등록</h3>
+        <form action="/admin/product/add" method="post">
+            <input type="text" name="name" placeholder="상품명 (예: 감자 5kg)" required>
+            <input type="number" name="price_retail" placeholder="소매가" required>
+            <input type="number" name="price_wholesale" placeholder="도매가" required>
+            <select name="category">
+            <option value="농산물직거래">🚜 농산물직거래</option>
+    <option value="식자재마트">🛒 식자재마트</option>
+    <option value="다이소">📦 다이소</option>
+            </select>
+            <button type="submit" class="btn-add">등록하기</button>
+        </form>
+    </div>
+
+    <div class="admin-box">
+        <h3>📋 등록된 상품 목록</h3>
+        <table>
+            <tr>
+                <th>카테고리</th>
+                <th>상품명</th>
+                <th>소매가</th>
+                <th>도매가</th>
+                <th>관리</th>
+            </tr>
+            {% for p in products %}
+            <tr>
+                <td>{{ p.category }}</td>
+                <td>{{ p.name }}</td>
+                <td>{{ p.price_retail }}원</td>
+                <td>{{ p.price_wholesale }}원</td>
+                <td><a href="/admin/product/delete/{{ p.id }}" class="btn-del" onclick="return confirm('정말 삭제할까요?')">삭제</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

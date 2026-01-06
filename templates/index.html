@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>바구니삼촌 - 싱싱한 구매대행</title>
+    <title>바구니삼촌 - 구매대행</title>
     <style>
         :root { --main-color: #2ecc71; --point-color: #e67e22; --bg-color: #f9f9f9; }
         body { font-family: sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: #333; }
@@ -15,12 +15,17 @@
         .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
         .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .product-img { width: 100%; height: 180px; background-color: #eee; display: flex; align-items: center; justify-content: center; color: #999; }
+        .product-img { width: 100%; height: 180px; background-color: #eee; display: flex; align-items: center; justify-content: center; }
         .product-info { padding: 15px; }
-        .category-tag { font-size: 12px; color: var(--main-color); font-weight: bold; }
+        .category-tag { font-size: 11px; background: #f1f1f1; padding: 2px 6px; border-radius: 4px; color: #666; }
         .name { font-size: 18px; margin: 5px 0; font-weight: bold; }
-        .wholesale-badge { background: #eefdf3; color: var(--main-color); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+        .price { font-size: 19px; margin-top: 5px; }
         .btn-order { display: block; width: 100%; padding: 10px 0; background-color: var(--main-color); color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        
+        /* 탭 버튼 기본 스타일 */
+        .tab-btn { padding: 10px 15px; text-decoration: none; border-radius: 20px; font-size: 14px; display: inline-block; margin: 5px; transition: 0.2s; }
+        .tab-active { background-color: var(--main-color); color: white; }
+        .tab-inactive { background-color: #eee; color: #666; }
     </style>
 </head>
 <body>
@@ -29,62 +34,82 @@
     <a href="/" class="logo">🧺 바구니삼촌</a>
     <div class="nav">
         {% if current_user.is_authenticated %}
-            <span><b>{{ current_user.name }}</b>님 ({{ current_user.grade }})</span>
-            <a href="/logout">로그아웃</a>
+            <span><b>{{ current_user.name }}</b>님</span> | <a href="/logout">로그아웃</a>
         {% else %}
-            <a href="/login">로그인</a>
-            <a href="/register">회원가입</a>
+            <a href="/login">로그인</a> | <a href="/register">회원가입</a>
         {% endif %}
     </div>
 </header>
 
 <div class="banner">
-    <h2>마트 가격 그대로, 문 앞까지 싱싱하게!</h2>
+    <h2>직거래부터 마트 장보기까지 한 번에!</h2>
 </div>
 
 <div class="container">
     <div style="text-align: center; margin-bottom: 30px;">
         
-        {# --- 전체보기 버튼 --- #}
+        {# 전체보기 버튼 #}
         {% if not current_cat %}
-            <a href="/" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: var(--main-color); color: white;">전체보기</a>
+            <a href="/" class="tab-btn tab-active">전체보기</a>
         {% else %}
-            <a href="/" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: #eee; color: #666;">전체보기</a>
+            <a href="/" class="tab-btn tab-inactive">전체보기</a>
         {% endif %}
 
-        {# --- 농산물 버튼 --- #}
-        {% if current_cat == '농산물' %}
-            <a href="/?cat=농산물" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: var(--main-color); color: white;">🥬 농산물</a>
+        {# 농산물직거래 버튼 #}
+        {% if current_cat == '농산물직거래' %}
+            <a href="/?cat=농산물직거래" class="tab-btn tab-active">🚜 농산물직거래</a>
         {% else %}
-            <a href="/?cat=농산물" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: #eee; color: #666;">🥬 농산물</a>
+            <a href="/?cat=농산물직거래" class="tab-btn tab-inactive">🚜 농산물직거래</a>
         {% endif %}
 
-        {# --- 공산품 버튼 --- #}
-        {% if current_cat == '공산품' %}
-            <a href="/?cat=공산품" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: var(--main-color); color: white;">📦 공산품</a>
+        {# 식자재마트 버튼 #}
+        {% if current_cat == '식자재마트' %}
+            <a href="/?cat=식자재마트" class="tab-btn tab-active">🛒 식자재마트</a>
         {% else %}
-            <a href="/?cat=공산품" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: #eee; color: #666;">📦 공산품</a>
+            <a href="/?cat=식자재마트" class="tab-btn tab-inactive">🛒 식자재마트</a>
         {% endif %}
 
-    </div> 
-  {% if current_user.is_admin %}
-    <div style="max-width: 1000px; margin: 40px auto; padding: 20px; border-top: 2px dashed #ccc; text-align: center;">
-        <h3 style="color: #34495e;">🛠️ 관리자 전용 마당</h3>
-        <p style="color: #7f8c8d; font-size: 14px;">관리자님, 여기서 상품을 관리하고 장부를 확인하세요.</p>
+        {# 다이소 버튼 #}
+        {% if current_cat == '다이소' %}
+            <a href="/?cat=다이소" class="tab-btn tab-active">📦 다이소</a>
+        {% else %}
+            <a href="/?cat=다이소" class="tab-btn tab-inactive">📦 다이소</a>
+        {% endif %}
         
-        <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-            <a href="/admin/products" style="background-color: #34495e; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
-                📦 상품 등록 및 수정
-            </a>
+    </div>
 
-            <a href="/admin/excel" style="background-color: #27ae60; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">
-                📥 주문장 엑셀 받기
-            </a>
+    <div class="product-grid">
+        {% for p in products %}
+        <div class="product-card">
+            <div class="product-img">
+                {% if p.image_url %}
+                    <img src="{{ p.image_url }}" style="width:100%; height:100%; object-fit:cover;">
+                {% else %}
+                    <span style="color:#999;">🥦 이미지 준비중</span>
+                {% endif %}
+            </div>
+            <div class="product-info">
+                <span class="category-tag">{{ p.category }}</span>
+                <div class="name">{{ p.name }}</div>
+                <div class="price">
+                    {% if current_user.is_authenticated and current_user.grade == 'WHOLESALE' %}
+                        <span style="font-size:12px; color:var(--main-color);">도매가</span> <b>{{ p.price_wholesale }}원</b>
+                    {% else %}
+                        <b>{{ p.price_retail }}원</b>
+                    {% endif %}
+                </div>
+                <button class="btn-order" onclick="alert('주문 기능이 곧 연결됩니다!')">🧺 주문하기</button>
+            </div>
         </div>
+        {% endfor %}
+    </div>
+
+    {% if current_user.is_admin %}
+    <div style="margin-top:50px; border-top:1px dashed #ccc; padding-top:20px; text-align:center;">
+        <a href="/admin/products" style="text-decoration:none; color:#34495e; font-weight:bold;">🛠️ 상품 관리 페이지 이동</a>
     </div>
     {% endif %}
+</div>
 
-</body>
-</html>
 </body>
 </html>

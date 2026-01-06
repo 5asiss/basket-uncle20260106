@@ -137,6 +137,7 @@ def delete_product(id):
     db.session.commit()
     return redirect(url_for('admin_products'))
 # --- [4단계] 서버 실행 및 초기화 ---
+# app.py 내의 초기화 블록 수정
 with app.app_context():
     db.create_all()
     if not User.query.filter_by(email='admin@test.com').first():
@@ -146,10 +147,12 @@ with app.app_context():
             name='관리자', 
             is_admin=True
         )
-        # 테스트 상품들 추가
-        p1 = Product(name='감자 1kg', price_retail=5000, price_wholesale=4000, category='농산물')
-        p2 = Product(name='주방세제', price_retail=3000, price_wholesale=2500, category='공산품')
-        db.session.add_all([admin, p1, p2])
+        # 바뀐 카테고리에 맞춘 예시 상품
+        p1 = Product(name='지례흑돼지 500g', price_retail=15000, price_wholesale=12000, category='농산물직거래', image_url='')
+        p2 = Product(name='대용량 식용유 18L', price_retail=45000, price_wholesale=42000, category='식자재마트', image_url='')
+        p3 = Product(name='다용도 정리함', price_retail=2000, price_wholesale=1500, category='다이소', image_url='')
+        
+        db.session.add_all([admin, p1, p2, p3])
         db.session.commit()
 
 if __name__ == '__main__':
