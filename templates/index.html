@@ -79,30 +79,44 @@
     </div>
 
     <div class="product-grid">
-        {% for p in products %}
-        <div class="product-card">
-            <div class="product-img">
-                {% if p.image_url %}
-                    <img src="{{ p.image_url }}" style="width:100%; height:100%; object-fit:cover;">
+    {% for p in products %}
+    <div class="product-card" style="position: relative; background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden;">
+        <div style="height: 160px; background: #f3f4f6; display: flex; align-items: center; justify-content: center;">
+            {% if p.image_url %}
+                <img src="{{ p.image_url }}" style="width: 100%; height: 100%; object-fit: cover;">
+            {% else %}
+                <span style="font-size: 40px;">🥦</span>
+            {% endif %}
+        </div>
+
+        <div style="padding: 15px;">
+            <span style="font-size: 10px; background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 10px; font-weight: bold;">
+                {{ p.category }}
+            </span>
+            
+            <div style="font-size: 16px; font-weight: bold; margin-top: 5px;">{{ p.name }}</div>
+            
+            <div style="font-size: 12px; color: #666; margin: 3px 0;">
+                {% if p.spec %}<i class="fas fa-box"></i> {{ p.spec }}{% endif %}
+                {% if p.origin %} | <i class="fas fa-map-marker-alt"></i> {{ p.origin }}{% endif %}
+            </div>
+
+            <div style="margin-top: 10px; display: flex; align-items: baseline; gap: 5px;">
+                {% if current_user.is_authenticated and current_user.grade == 'WHOLESALE' %}
+                    <span style="color: #e67e22; font-size: 12px; font-weight: bold;">도매</span>
+                    <span style="font-size: 18px; font-weight: bold; color: #333;">{{ "{:,}".format(p.price_wholesale) }}원</span>
                 {% else %}
-                    <span style="color:#999;">🥦 이미지 준비중</span>
+                    <span style="font-size: 18px; font-weight: bold; color: #333;">{{ "{:,}".format(p.price_retail) }}원</span>
                 {% endif %}
             </div>
-            <div class="product-info">
-                <span class="category-tag">{{ p.category }}</span>
-                <div class="name">{{ p.name }}</div>
-                <div class="price">
-                    {% if current_user.is_authenticated and current_user.grade == 'WHOLESALE' %}
-                        <span style="font-size:12px; color:var(--main-color);">도매가</span> <b>{{ p.price_wholesale }}원</b>
-                    {% else %}
-                        <b>{{ p.price_retail }}원</b>
-                    {% endif %}
-                </div>
-                <button class="btn-order" onclick="alert('주문 기능이 곧 연결됩니다!')">🧺 주문하기</button>
-            </div>
+
+            <button onclick="alert('주문 기능 연결 중입니다!')" style="width: 100%; margin-top: 12px; background: #2ecc71; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                장바구니 담기
+            </button>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
+</div>
 
     {% if current_user.is_admin %}
     <div style="margin-top:50px; border-top:1px dashed #ccc; padding-top:20px; text-align:center;">

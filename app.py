@@ -26,10 +26,15 @@ class User(db.Model, UserMixin):
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    price_retail = db.Column(db.Integer)
-    price_wholesale = db.Column(db.Integer)
-    category = db.Column(db.String(50))
+    name = db.Column(db.String(100), nullable=False)
+    price_retail = db.Column(db.Integer)    # 소매가
+    price_wholesale = db.Column(db.Integer) # 도매가
+    category = db.Column(db.String(50))     # 농산물직거래/식자재마트/다이소
+    
+    # --- 식자재마트 전용 상세 정보 ---
+    spec = db.Column(db.String(100))        # 규격 (예: 18L, 1kg, 20개입)
+    origin = db.Column(db.String(100))      # 원산지 (예: 국내산, 수입산)
+    image_url = db.Column(db.String(500))   # 이미지 주소
     is_active = db.Column(db.Boolean, default=True)
 
 class Order(db.Model):
@@ -121,6 +126,9 @@ def add_product():
         price_retail = int(request.form['price_retail']),
         price_wholesale = int(request.form['price_wholesale']),
         category = request.form['category'],
+        spec = request.form.get('spec', ''),      # 추가
+        origin = request.form.get('origin', ''),  # 추가
+        image_url = request.form.get('image_url', ''),
         is_active = True
     )
     db.session.add(new_p)
