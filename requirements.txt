@@ -4,8 +4,4 @@ flask_login
 pandas
 openpyxl
 werkzeug
-<<<<<<< HEAD
 gunicorn
-=======
-gunicorn
->>>>>>> 45972429735a9b9123c8e76c149b78219306f788
