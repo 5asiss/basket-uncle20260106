@@ -9,12 +9,13 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'basket-uncle-1234'
-# 파일 상단에 import os 가 있는지 확인하세요
+
+# 데이터베이스 경로 설정
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'basket.db')
 db = SQLAlchemy(app)
 
-# --- 데이터베이스 설계 ---
+# --- [1단계] 데이터베이스 설계도 (먼저 정의해야 함) ---
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -38,7 +39,7 @@ class Order(db.Model):
     total_price = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=datetime.now)
 
-# --- 로그인 관리 설정 ---
+# --- [2단계] 로그인 관리 설정 ---
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
@@ -47,11 +48,15 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# --- 화면 경로 설정 ---
+# --- [3단계] 화면 경로 설정 (이제 Product를 마음껏 쓸 수 있습니다) ---
 @app.route('/')
 def index():
-    products = Product.query.filter_by(is_active=True).all()
-    return render_template('index.html', products=products)
+    category_name = request.args.get('cat')
+    if category_name:
+        products = Product.query.filter_by(category=category_name, is_active=True).all()
+    else:
+        products = Product.query.filter_by(is_active=True).all()
+    return render_template('index.html', products=products, current_cat=category_name)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -89,41 +94,18 @@ def download_excel():
     if not current_user.is_admin:
         return "권한 없음"
     orders = Order.query.all()
-    order_list = []
-    for o in orders:
-        order_list.append({
-            "주문ID": o.id, 
-            "상품명": o.product_name, 
-            "금액": o.total_price, 
-            "날짜": o.created_at
-        })
-    df = pd.DataFrame(order_list)
+    df = pd.DataFrame([{
+        "주문ID": o.id, "상품명": o.product_name, "금액": o.total_price, "날짜": o.created_at
+    } for o in orders])
     output = BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df.to_excel(writer, index=False)
     output.seek(0)
     return send_file(output, download_name="orders.xlsx", as_attachment=True)
 
-# 초기화 함수
-def init_db():
-    with app.app_context():
-        db.create_all()
-        if not User.query.filter_by(email='admin@test.com').first():
-            admin = User(
-                email='admin@test.com', 
-                password=generate_password_hash('1234'), 
-                name='관리자', 
-                is_admin=True
-            )
-            p1 = Product(name='감자 1kg', price_retail=5000, price_wholesale=4000, category='농산물')
-            db.session.add(admin)
-            db.session.add(p1)
-            db.session.commit()
-
-# 기존 맨 아래 부분을 지우고 이걸로 교체하세요
+# --- [4단계] 서버 실행 및 초기화 ---
 with app.app_context():
-    db.create_all()  # 테이블이 없으면 새로 생성
-    # 관리자 계정이 없으면 생성
+    db.create_all()
     if not User.query.filter_by(email='admin@test.com').first():
         admin = User(
             email='admin@test.com', 
@@ -131,12 +113,11 @@ with app.app_context():
             name='관리자', 
             is_admin=True
         )
-        # 테스트용 상품 하나 추가 (테이블이 비어있으면 에러 날 수 있음)
+        # 테스트 상품들 추가
         p1 = Product(name='감자 1kg', price_retail=5000, price_wholesale=4000, category='농산물')
-        db.session.add(admin)
-        db.session.add(p1)
+        p2 = Product(name='주방세제', price_retail=3000, price_wholesale=2500, category='공산품')
+        db.session.add_all([admin, p1, p2])
         db.session.commit()
-        print("DB 초기화 완료!")
 
 if __name__ == '__main__':
     app.run(debug=True)

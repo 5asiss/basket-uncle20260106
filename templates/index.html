@@ -6,34 +6,21 @@
     <title>바구니삼촌 - 싱싱한 구매대행</title>
     <style>
         :root { --main-color: #2ecc71; --point-color: #e67e22; --bg-color: #f9f9f9; }
-        body { font-family: 'Pretendard', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: #333; }
-        
-        /* 헤더 디자인 */
+        body { font-family: sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: #333; }
         header { background-color: white; padding: 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .logo { font-size: 28px; font-weight: bold; color: var(--main-color); text-decoration: none; }
         .nav { margin-top: 15px; }
         .nav a { margin: 0 10px; text-decoration: none; color: #666; font-size: 14px; }
-
-        /* 메인 배너 */
         .banner { background-color: var(--main-color); color: white; padding: 40px 20px; text-align: center; }
-        .banner h2 { margin: 0; font-size: 24px; }
-
-        /* 상품 리스트 레이아웃 */
         .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        
-        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }
-        .product-card:hover { transform: translateY(-5px); }
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .product-img { width: 100%; height: 180px; background-color: #eee; display: flex; align-items: center; justify-content: center; color: #999; }
         .product-info { padding: 15px; }
-        .category { font-size: 12px; color: var(--main-color); font-weight: bold; }
+        .category-tag { font-size: 12px; color: var(--main-color); font-weight: bold; }
         .name { font-size: 18px; margin: 5px 0; font-weight: bold; }
-        .price { font-size: 20px; color: #333; }
         .wholesale-badge { background: #eefdf3; color: var(--main-color); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
-
-        /* 버튼 디자인 */
         .btn-order { display: block; width: 100%; padding: 10px 0; background-color: var(--main-color); color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px; font-weight: bold; }
-        .btn-admin { background-color: #34495e; color: white; padding: 10px; border-radius: 8px; text-decoration: none; display: inline-block; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -53,36 +40,35 @@
 
 <div class="banner">
     <h2>마트 가격 그대로, 문 앞까지 싱싱하게!</h2>
-    <p>바구니삼촌이 오늘 아침 가장 좋은 물건만 골랐습니다.</p>
 </div>
 
 <div class="container">
-    <div class="product-grid">
-        {% for p in products %}
-        <div class="product-card">
-            <div class="product-img">🥦 이미지 준비중</div>
-            <div class="product-info">
-                <span class="category">{{ p.category }}</span>
-                <div class="name">{{ p.name }}</div>
-                <div class="price">
-                    {% if current_user.is_authenticated and current_user.grade == 'WHOLESALE' %}
-                        <span class="wholesale-badge">도매가</span> <b>{{ p.price_wholesale }}원</b>
-                    {% else %}
-                        <b>{{ p.price_retail }}원</b>
-                    {% endif %}
-                </div>
-                <button class="btn-order" onclick="alert('주문 기능이 곧 연결됩니다!')">🧺 장바구니 담기</button>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+    <div style="text-align: center; margin-bottom: 30px;">
+        
+        {# --- 전체보기 버튼 --- #}
+        {% if not current_cat %}
+            <a href="/" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: var(--main-color); color: white;">전체보기</a>
+        {% else %}
+            <a href="/" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: #eee; color: #666;">전체보기</a>
+        {% endif %}
 
-    {% if current_user.is_admin %}
-    <center>
-        <a href="/admin/excel" class="btn-admin">📊 관리자 전용: 주문내역 엑셀 다운로드</a>
-    </center>
-    {% endif %}
-</div>
+        {# --- 농산물 버튼 --- #}
+        {% if current_cat == '농산물' %}
+            <a href="/?cat=농산물" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: var(--main-color); color: white;">🥬 농산물</a>
+        {% else %}
+            <a href="/?cat=농산물" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: #eee; color: #666;">🥬 농산물</a>
+        {% endif %}
+
+        {# --- 공산품 버튼 --- #}
+        {% if current_cat == '공산품' %}
+            <a href="/?cat=공산품" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: var(--main-color); color: white;">📦 공산품</a>
+        {% else %}
+            <a href="/?cat=공산품" style="padding: 10px 20px; text-decoration: none; border-radius: 20px; display: inline-block; background-color: #eee; color: #666;">📦 공산품</a>
+        {% endif %}
+
+    </div> 
+    <div class="product-grid">
+        {# ... 이 아래 상품 목록 코드는 그대로 두시면 됩니다 ... #}
 
 </body>
 </html>
