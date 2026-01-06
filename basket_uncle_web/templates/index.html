@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head><title>바구니삼촌</title></head>
+<body>
+  {% if current_user.is_admin %}
+<div style="background-color: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 20px;">
+    <h4>🛠️ 관리자 전용 메뉴</h4>
+    <a href="/admin/orders/excel" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">
+        📥 전체 주문내역 엑셀 다운로드
+    </a>
+</div>
+{% endif %}
+    <h1>🧺 바구니삼촌 구매대행</h1>
+    {% if current_user.is_authenticated %}
+        <p>{{ current_user.name }}님 환영합니다 (등급: {{ current_user.grade }}) | <a href="/logout">로그아웃</a></p>
+        {% if current_user.is_admin %}<a href="/admin/excel">📊 주문 엑셀 다운로드</a>{% endif %}
+    {% else %}
+        <a href="/login">로그인</a> | <a href="/register">회원가입</a>
+    {% endif %}
+
+    <hr>
+    <h3>오늘의 상품</h3>
+    {% for p in products %}
+    <div style="border:1px solid #ccc; padding:10px; margin:10px;">
+        <h4>{{ p.name }} ({{ p.category }})</h4>
+        <p>가격: 
+            {% if current_user.is_authenticated and current_user.grade == 'WHOLESALE' %}
+                <b style="color:blue;">도매가 {{ p.price_wholesale }}원</b>
+            {% else %}
+                <b>소매가 {{ p.price_retail }}원</b>
+            {% endif %}
+        </p>
+        <button onclick="alert('주문 기능은 다음 단계에서 연결합니다!')">주문하기</button>
+    </div>
+    {% endfor %}
+</body>
+</html>
