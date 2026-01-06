@@ -7,6 +7,7 @@ import pandas as pd
 from io import BytesIO
 from datetime import datetime
 
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'basket-uncle-1234'
 
@@ -165,3 +166,44 @@ with app.app_context():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    import pandas as pd
+from flask import flash # 메시지 알림용
+
+@app.route('/admin/upload/excel', methods=['POST'])
+@login_required
+def upload_excel():
+    if not current_user.is_admin: return "권한 없음"
+    
+    file = request.files.get('file')
+    if not file:
+        return "파일이 없습니다."
+
+    try:
+        # 1. 엑셀 읽기
+        df = pd.read_excel(file)
+
+        # 2. 데이터 반복하며 DB 저장
+        for _, row in df.iterrows():
+            # 카테고리 숫자 -> 이름 변환 (사용자 설정에 맞춤)
+            cat_map = {1: '농산물직거래', 2: '식자재마트', 3: '다이소'}
+            cat_name = cat_map.get(row['카테고리'], '기타')
+
+            # 이미지 경로 생성 (static 폴더 기준)
+            img_path = f"/static/product_images/{row['이미지파일명']}"
+
+            new_p = Product(
+                name=row['상품명'],
+                spec=row['규격'],
+                price_retail=int(row['가격']),
+                price_wholesale=int(row['가격'] * 0.9), # 도매가는 10% 저렴하게 자동계산 예시
+                category=cat_name,
+                image_url=img_path,
+                is_active=True
+            )
+            db.session.add(new_p)
+        
+        db.session.commit()
+        return redirect(url_for('admin_products'))
+
+    except Exception as e:
+        return f"오류 발생: {e}"
