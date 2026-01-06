@@ -9,7 +9,9 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'basket-uncle-1234'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///basket.db'
+# 파일 상단에 import os 가 있는지 확인하세요
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'basket.db')
 db = SQLAlchemy(app)
 
 # --- 데이터베이스 설계 ---
