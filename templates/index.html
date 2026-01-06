@@ -1,37 +1,88 @@
 <!DOCTYPE html>
-<html>
-<head><title>바구니삼촌</title></head>
-<body>
-  {% if current_user.is_admin %}
-<div style="background-color: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 20px;">
-    <h4>🛠️ 관리자 전용 메뉴</h4>
-    <a href="/admin/orders/excel" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">
-        📥 전체 주문내역 엑셀 다운로드
-    </a>
-</div>
-{% endif %}
-    <h1>🧺 바구니삼촌 구매대행</h1>
-    {% if current_user.is_authenticated %}
-        <p>{{ current_user.name }}님 환영합니다 (등급: {{ current_user.grade }}) | <a href="/logout">로그아웃</a></p>
-        {% if current_user.is_admin %}<a href="/admin/excel">📊 주문 엑셀 다운로드</a>{% endif %}
-    {% else %}
-        <a href="/login">로그인</a> | <a href="/register">회원가입</a>
-    {% endif %}
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>바구니삼촌 - 싱싱한 구매대행</title>
+    <style>
+        :root { --main-color: #2ecc71; --point-color: #e67e22; --bg-color: #f9f9f9; }
+        body { font-family: 'Pretendard', sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: #333; }
+        
+        /* 헤더 디자인 */
+        header { background-color: white; padding: 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .logo { font-size: 28px; font-weight: bold; color: var(--main-color); text-decoration: none; }
+        .nav { margin-top: 15px; }
+        .nav a { margin: 0 10px; text-decoration: none; color: #666; font-size: 14px; }
 
-    <hr>
-    <h3>오늘의 상품</h3>
-    {% for p in products %}
-    <div style="border:1px solid #ccc; padding:10px; margin:10px;">
-        <h4>{{ p.name }} ({{ p.category }})</h4>
-        <p>가격: 
-            {% if current_user.is_authenticated and current_user.grade == 'WHOLESALE' %}
-                <b style="color:blue;">도매가 {{ p.price_wholesale }}원</b>
-            {% else %}
-                <b>소매가 {{ p.price_retail }}원</b>
-            {% endif %}
-        </p>
-        <button onclick="alert('주문 기능은 다음 단계에서 연결합니다!')">주문하기</button>
+        /* 메인 배너 */
+        .banner { background-color: var(--main-color); color: white; padding: 40px 20px; text-align: center; }
+        .banner h2 { margin: 0; font-size: 24px; }
+
+        /* 상품 리스트 레이아웃 */
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-img { width: 100%; height: 180px; background-color: #eee; display: flex; align-items: center; justify-content: center; color: #999; }
+        .product-info { padding: 15px; }
+        .category { font-size: 12px; color: var(--main-color); font-weight: bold; }
+        .name { font-size: 18px; margin: 5px 0; font-weight: bold; }
+        .price { font-size: 20px; color: #333; }
+        .wholesale-badge { background: #eefdf3; color: var(--main-color); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+
+        /* 버튼 디자인 */
+        .btn-order { display: block; width: 100%; padding: 10px 0; background-color: var(--main-color); color: white; border: none; border-radius: 6px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        .btn-admin { background-color: #34495e; color: white; padding: 10px; border-radius: 8px; text-decoration: none; display: inline-block; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="logo">🧺 바구니삼촌</a>
+    <div class="nav">
+        {% if current_user.is_authenticated %}
+            <span><b>{{ current_user.name }}</b>님 ({{ current_user.grade }})</span>
+            <a href="/logout">로그아웃</a>
+        {% else %}
+            <a href="/login">로그인</a>
+            <a href="/register">회원가입</a>
+        {% endif %}
     </div>
-    {% endfor %}
+</header>
+
+<div class="banner">
+    <h2>마트 가격 그대로, 문 앞까지 싱싱하게!</h2>
+    <p>바구니삼촌이 오늘 아침 가장 좋은 물건만 골랐습니다.</p>
+</div>
+
+<div class="container">
+    <div class="product-grid">
+        {% for p in products %}
+        <div class="product-card">
+            <div class="product-img">🥦 이미지 준비중</div>
+            <div class="product-info">
+                <span class="category">{{ p.category }}</span>
+                <div class="name">{{ p.name }}</div>
+                <div class="price">
+                    {% if current_user.is_authenticated and current_user.grade == 'WHOLESALE' %}
+                        <span class="wholesale-badge">도매가</span> <b>{{ p.price_wholesale }}원</b>
+                    {% else %}
+                        <b>{{ p.price_retail }}원</b>
+                    {% endif %}
+                </div>
+                <button class="btn-order" onclick="alert('주문 기능이 곧 연결됩니다!')">🧺 장바구니 담기</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if current_user.is_admin %}
+    <center>
+        <a href="/admin/excel" class="btn-admin">📊 관리자 전용: 주문내역 엑셀 다운로드</a>
+    </center>
+    {% endif %}
+</div>
+
 </body>
 </html>
