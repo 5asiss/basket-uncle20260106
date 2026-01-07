@@ -88,17 +88,12 @@ def admin_add_product_page():
 def admin_categories_page():
     if not session.get('is_admin'): return "권한 없음"
     
-    # 1. 사용자가 '카테고리 생성' 버튼을 눌렀을 때 (POST 방식)
     if request.method == 'POST':
-        new_cat_name = request.form.get('name')
-        if new_cat_name:
-            # 삼촌님은 CATEGORIES 리스트를 쓰시므로 여기에 추가해줍니다.
-            if new_cat_name not in CATEGORIES:
-                CATEGORIES.append(new_cat_name)
-                # (참고) 만약 DB에도 저장하고 싶다면 여기에 DB 저장 코드를 추가할 수 있습니다.
-            return redirect(url_for('admin_categories_page'))
-
-    # 2. 그냥 페이지를 열었을 때 (GET 방식)
+        new_name = request.form.get('name')
+        if new_name and new_name not in CATEGORIES:
+            CATEGORIES.append(new_name) # 임시로 리스트에 추가 (새로고침 전까지 유지)
+        return redirect(url_for('admin_categories_page'))
+        
     return render_template('admin_categories.html', categories=CATEGORIES)
 
 @app.route('/admin/orders')
