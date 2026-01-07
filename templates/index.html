@@ -74,43 +74,56 @@
     {% endfor %}
 </div>
 
-{% if current_cat %}
-    {% set ns = namespace(found_cat=None) %}
-    {% for c in main_cats %}
-        {% if c.name == current_cat %}
-            {% set ns.found_cat = c %}
-        {% endif %}
+{% if current_cat == '식자재마트' %}
+<div class="tabs" style="background:#f9f9f9; border-top: none;">
+    <a href="/?cat=식자재마트" class="tab-item {{ 'active' if not current_sub }}" style="font-size:12px;">전체보기</a>
+    {% for s in sub_cats %}
+    <a href="/?cat=식자재마트&sub={{ s.name }}" class="tab-item {{ 'active' if current_sub == s.name }}" style="font-size:12px;">{{ s.name }}</a>
     {% endfor %}
-
-    {% if ns.found_cat and ns.found_cat.sub_categories %}
-    <div class="tabs" style="background:#f9f9f9; border-top: none; border-bottom: 1px solid #ddd; padding: 5px 10px;">
-        <a href="/?cat={{ current_cat }}" class="tab-item {{ 'active' if not current_sub }}" style="font-size:12px; padding: 5px 12px;">전체보기</a>
-        {% for s in ns.found_cat.sub_categories %}
-        <a href="/?cat={{ current_cat }}&sub={{ s.name }}" class="tab-item {{ 'active' if current_sub == s.name }}" style="font-size:12px; padding: 5px 12px;">{{ s.name }}</a>
-        {% endfor %}
-    </div>
+</div>
+{% endif %}
+{% set active_main_cat = None %}
+{% for c in main_cats %}
+    {% if c.name == current_cat %}
+        {% set active_main_cat = c %}
     {% endif %}
+{% endfor %}
+
+{% if active_main_cat and active_main_cat.sub_categories %}
+<div class="tabs" style="background:#f9f9f9; border-top: none; border-bottom: 1px solid #ddd;">
+    <a href="/?cat={{ current_cat }}" class="tab-item {{ 'active' if not current_sub }}" style="font-size:12px;">전체보기</a>
+    {% for s in active_main_cat.sub_categories %}
+    <a href="/?cat={{ current_cat }}&sub={{ s.name }}" class="tab-item {{ 'active' if current_sub == s.name }}" style="font-size:12px;">{{ s.name }}</a>
+    {% endfor %}
+</div>
 {% endif %}
 <div class="product-grid">
-    {% for p in products %}
-    <div class="product-card">
-        <div class="img-box">
-            {% if p.image_url %}
-                <img src="{{ p.image_url }}" alt="{{ p.name }}">
-            {% else %}
-                <div class="no-img">🥦</div>
-            {% endif %}
-        </div>
+   {% for p in products %}
+<div class="product-card">
+    <img src="{{ p.image_url }}" alt="">
+    <div class="p-name">{{ p.name }}</div>
+    <div class="p-spec">{{ p.spec }}</div>
+    <div class="p-price">{{ p.price_retail }}원</div>
+   <a href="/add/{{ p.id }}" style="display:block; text-align:center; background:#2ecc71; color:white; padding:10px; border-radius:5px; text-decoration:none;">
+    🛒 장바구니 담기
+</a>
+    </a>
+</div>
+{% endfor %}
         <div class="info-box">
             <div class="p-name">{{ p.name }}</div>
             <div class="p-spec">{{ p.spec if p.spec else '' }}</div>
             <div class="p-price">
+                
                 {% if current_user.is_authenticated and current_user.grade == 'WHOLESALE' %}
                     {{ "{:,}".format(p.price_wholesale) }}<small>원 (도매)</small>
                 {% else %}
                     {{ "{:,}".format(p.price_retail) }}<small>원</small>
                 {% endif %}
             </div>
+            <a href="{{ url_for('add_to_cart', product_id=p.id) }}" style="display:block; text-align:center; background:#2ecc71; color:white; text-decoration:none; padding:10px; border-radius:5px; margin-top:10px; font-weight:bold;">
+    🛒 장바구니 담기
+</a>
         </div>
     </div>
     {% endfor %}
