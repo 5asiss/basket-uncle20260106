@@ -94,7 +94,7 @@ def upload_excel():
     file = request.files.get('file')
     SUB_MAP = {1:"과일", 2:"채소", 3:"양곡/견과류", 4:"정육/계란", 5:"수산/건해산물", 6:"양념/가루/오일", 7:"반찬/냉장/냉동/즉석식품", 8:"면류/통조림/간편식품", 9:"유제품/베이커리", 10:"생수/음료/커피/차", 11:"과자/시리얼/빙과", 12:"바디케어/베이비", 13:"주방/세제/세탁/청소", 14:"생활/잡화", 15:"대용량/식자재", 16:"세트상품"}
     try:
-        df = pd.read_excel(file)
+       df = pd.read_excel(file, engine='openpyxl')
         for _, row in df.iterrows():
             cat_name = {1:'농산물직거래', 2:'식자재마트', 3:'다이소'}.get(int(row['카테고리']), '기타')
             sub_name = SUB_MAP.get(int(row['세부카테고리']), '기타')
