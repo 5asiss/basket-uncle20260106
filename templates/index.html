@@ -2,41 +2,85 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>바구니삼촌</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: sans-serif; margin: 0; background: #f4f4f4; }
-        header { background: white; padding: 15px; display: flex; justify-content: space-between; border-bottom: 2px solid #2ecc71; }
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; }
-        .card { background: white; border-radius: 8px; overflow: hidden; border: 1px solid #eee; display: flex; flex-direction: column; }
-        .info { padding: 10px; }
-        .name { font-size: 14px; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-clamp: 2; }
-        .price { color: #ae0000; font-weight: bold; font-size: 16px; }
-        .btn { display: block; background: #2ecc71; color: white; text-align: center; padding: 8px; text-decoration: none; border-radius: 4px; margin-top: 5px; font-size: 13px; }
+        :root { --main-color: #2ecc71; --price-color: #ae0000; --bg-color: #f4f4f4; }
+        body { font-family: sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; }
+        header { background: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .logo { font-size: 20px; font-weight: bold; color: var(--main-color); text-decoration: none; }
+        .tabs { background: white; display: flex; overflow-x: auto; white-space: nowrap; padding: 10px; border-bottom: 1px solid #eee; gap: 10px; -ms-overflow-style: none; scrollbar-width: none; }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab-item { padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 14px; background: #f0f0f0; color: #666; }
+        .tab-item.active { background: var(--main-color); color: white; font-weight: bold; }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px; }
+        @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(4, 1fr); } }
+        .product-card { background: white; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .img-box { width: 100%; aspect-ratio: 1/1; background: #f9f9f9; position: relative; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .no-img { display: flex; align-items: center; justify-content: center; height: 100%; color: #ccc; font-size: 30px; }
+        .info-box { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; }
+        .p-name { font-size: 13px; color: #333; line-height: 1.4; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-clamp: 2; }
+        .p-spec { font-size: 11px; color: #888; }
+        .p-price { font-size: 16px; font-weight: bold; color: var(--price-color); margin-top: auto; }
+        .p-price small { font-size: 11px; color: #999; font-weight: normal; margin-left: 2px; }
+        .admin-link { display: block; text-align: center; padding: 15px; color: #999; text-decoration: none; font-size: 12px; }
     </style>
 </head>
 <body>
 <header>
-    <a href="/" style="text-decoration:none; color:#2ecc71; font-weight:bold;">🧺 바구니삼촌</a>
-    <div style="font-size: 13px;">
+    <a href="/" class="logo">🧺 바구니삼촌</a>
+    <div style="font-size: 14px;">
         {% if current_user.is_authenticated %}
-            <a href="/cart">장바구니</a> | <a href="/logout">로그아웃</a>
+            <a href="/logout" style="text-decoration:none; color:#666;">로그아웃</a>
         {% else %}
-            <a href="/login">로그인</a> | <a href="/register">회원가입</a>
+            <a href="/login" style="text-decoration:none; color:#666;">로그인</a>
         {% endif %}
     </div>
 </header>
+
+<div class="tabs">
+    <a href="/" class="tab-item {{ 'active' if not current_cat }}">전체</a>
+    {% for c in main_cats %}
+    <a href="/?cat={{ c.name }}" class="tab-item {{ 'active' if current_cat == c.name }}">{{ c.name }}</a>
+    {% endfor %}
+</div>
+
+{% if current_cat == '식자재마트' %}
+<div class="tabs" style="background:#f9f9f9; border-top: none;">
+    <a href="/?cat=식자재마트" class="tab-item {{ 'active' if not current_sub }}" style="font-size:12px;">전체보기</a>
+    {% for s in sub_cats %}
+    <a href="/?cat=식자재마트&sub={{ s.name }}" class="tab-item {{ 'active' if current_sub == s.name }}" style="font-size:12px;">{{ s.name }}</a>
+    {% endfor %}
+</div>
+{% endif %}
+
 <div class="product-grid">
     {% for p in products %}
-    <div class="card">
-        <div style="height:150px; background:#eee; display:flex; align-items:center; justify-content:center;">🥦</div>
-        <div class="info">
-            <div class="name">{{ p.name }}</div>
-            <div class="price">{{ "{:,}".format(p.price) }}원</div>
-            <a href="/add_to_cart/{{ p.id }}" class="btn">담기</a>
+    <div class="product-card">
+        <div class="img-box">
+            {% if p.image_url %}<img src="{{ p.image_url }}">{% else %}<div class="no-img">🥦</div>{% endif %}
+        </div>
+        <div class="info-box">
+            <div class="p-name">{{ p.name }}</div>
+            <div class="p-spec">{{ p.spec if p.spec else '' }}</div>
+            <div class="p-price">
+                {% if current_user.is_authenticated and current_user.grade == 'WHOLESALE' %}
+                    {{ "{:,}".format(p.price_wholesale) }}<small>원 (도매)</small>
+                {% else %}
+                    {{ "{:,}".format(p.price_retail) }}<small>원</small>
+                {% endif %}
+            </div>
         </div>
     </div>
     {% endfor %}
 </div>
+
+{% if current_user.is_authenticated and current_user.is_admin %}
+<div style="margin-top: 30px; border-top: 1px dashed #ddd;">
+    <a href="/admin/categories" class="admin-link">📂 카테고리 관리</a>
+</div>
+{% endif %}
 </body>
 </html>
