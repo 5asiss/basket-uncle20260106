@@ -127,12 +127,19 @@ def add_to_cart(product_id):
 def cart_page():
     cart_items = Cart.query.filter_by(user_id=current_user.id).all()
     grouped_cart = {}
+    
     for item in cart_items:
-        cat = item.product.category if item.product.category else "기타"
-        if cat not in grouped_cart: grouped_cart[cat] = []
+        # 엑셀이나 DB에서 카테고리가 비어있을 경우를 대비해 '기본' 처리
+        cat = item.product.category if item.product.category else "기본배송"
+        if cat not in grouped_cart:
+            grouped_cart[cat] = []
         grouped_cart[cat].append(item)
-    return render_template('cart.html', grouped_cart=grouped_cart, min_price=10000, delivery_fee=1900)
-
+    
+    # 설정값 (숫자로 확실히 고정)
+    return render_template('cart.html', 
+                           grouped_cart=grouped_cart, 
+                           min_price=10000, 
+                           delivery_fee=1900)
 # --- [5. 관리자 기능: 카테고리 & 상품 & 엑셀] ---
 
 @app.route('/admin/categories', methods=['GET', 'POST'])
@@ -167,7 +174,52 @@ def admin_products():
     if not current_user.is_admin: return "권한 없음"
     products = Product.query.all()
     return render_template('admin_products.html', products=products)
+@app.route('/admin/product/add', methods=['GET', 'POST'])
+@login_required
+def add_product():
+    if not current_user.is_admin:
+        return "권한이 없습니다."
+    
+    if request.method == 'POST':
+        try:
+            # 1. 폼 데이터 가져오기
+            name = request.form.get('name')
+            spec = request.form.get('spec')
+            price_str = request.form.get('price')
+            category = request.form.get('category')
+            sub_category = request.form.get('sub_category')
+            image_url = request.form.get('image_url')
 
+            # 2. 가격 숫자로 변환 (입력 안 했으면 0원)
+            price = int(price_str) if price_str and price_str.isdigit() else 0
+
+            # 3. DB에 저장
+            new_p = Product(
+                name=name, 
+                spec=spec, 
+                price_retail=price,
+                category=category, 
+                sub_category=sub_category, 
+                image_url=image_url
+            )
+            db.session.add(new_p)
+            db.session.commit()
+            
+            # 4. 성공 시 상품 목록으로 강제 이동
+            print(f"상품 등록 성공: {name}")
+            return redirect('/admin/products') 
+
+        except Exception as e:
+            db.session.rollback() # 에러 나면 장부 취소
+            return f"등록 중 오류 발생: {e}" # 로딩 대신 에러 메시지 출력
+
+    # GET 요청 시 화면 보여주기
+    main_cats = Category.query.filter_by(type='MAIN').all()
+    return render_template('admin_add_product.html', main_cats=main_cats)
+    
+    # 등록 화면으로 갈 때 현재 있는 카테고리 목록을 다 가져갑니다
+    main_cats = Category.query.filter_by(type='MAIN').all()
+    return render_template('admin_add_product.html', main_cats=main_cats)
 @app.route('/admin/upload/excel', methods=['POST'])
 @login_required
 def upload_excel():
@@ -186,6 +238,7 @@ def upload_excel():
         db.session.commit()
         return redirect(url_for('admin_products'))
     except Exception as e: return f"에러: {e}"
+    
 
 # --- [6. 서버 시작 시 초기화] ---
 with app.app_context():

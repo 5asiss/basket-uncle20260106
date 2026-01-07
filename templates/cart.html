@@ -3,67 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>장바구니 - 바구니삼촌</title>
+    <title>장바구니</title>
     <style>
-        body { font-family: sans-serif; background: #f0f2f1; padding: 15px; margin: 0; }
-        .header { background: #2ecc71; color: white; padding: 15px; text-align: center; font-weight: bold; margin-bottom: 20px; }
-        .cart-group { background: white; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; }
-        .group-name { background: #e8f5e9; padding: 12px 15px; font-weight: bold; color: #2e7d32; border-bottom: 1px solid #c8e6c9; }
-        .item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-        .summary { padding: 20px; background: #fcfcfc; text-align: right; }
-        .fee-info { font-size: 14px; color: #666; margin-bottom: 5px; }
-        .total-row { font-size: 18px; font-weight: bold; color: #d35400; margin-top: 10px; }
-        .min-alert { color: #e74c3c; background: #fdf2f2; padding: 10px; border-radius: 5px; font-size: 13px; text-align: center; margin-top: 15px; }
-        .btn-pay { background: #2ecc71; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn-pay:disabled { background: #ccc; cursor: not-allowed; }
+        body { font-family: 'Apple SD Gothic Neo', sans-serif; background: #f8f9fa; margin: 0; padding: 20px; color: #333; }
+        .cart-card { background: white; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 25px; overflow: hidden; }
+        .cat-title { background: #2ecc71; color: white; padding: 15px; font-weight: bold; font-size: 18px; }
+        .item { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        .price-box { text-align: right; padding: 20px; background: #fafafa; border-top: 2px solid #eee; }
+        .total-row { font-size: 20px; font-weight: bold; color: #e74c3c; margin-top: 10px; }
+        .status-msg { padding: 10px; border-radius: 8px; text-align: center; margin-top: 10px; font-weight: bold; }
+        .msg-error { background: #fff5f5; color: #e74c3c; border: 1px solid #feb2b2; }
+        .msg-ok { background: #f0fff4; color: #2ecc71; border: 1px solid #9ae6b4; }
+        .btn-order { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .btn-ready { background: #2ecc71; color: white; }
+        .btn-disabled { background: #ddd; color: #999; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
-<div class="header">🛒 장바구니 (분리 배송)</div>
+<h2 style="text-align: center; margin-bottom: 30px;">🛒 장바구니</h2>
 
-<div style="max-width: 600px; margin: 0 auto;">
-    {% if not grouped_cart %}
-        <div style="text-align: center; padding: 50px; background: white; border-radius: 10px;">
-            <p>담긴 상품이 없습니다.</p>
-            <a href="/" style="color: #2ecc71;">구경하러 가기</a>
-        </div>
-    {% endif %}
-
-    {% for cat, items in grouped_cart.items() %}
-        {% set sub_total = 0 %}
-        {% for i in items %} {% set sub_total = sub_total + (i.product.price_retail * i.quantity) %} {% endfor %}
-
-        <div class="cart-group">
-            <div class="group-name">📍 {{ cat }} 배송</div>
-            {% for i in items %}
-            <div class="item">
-                <div>
-                    <div style="font-weight: bold;">{{ i.product.name }}</div>
-                    <div style="font-size: 12px; color: #888;">{{ i.quantity }}개 / {{ i.product.spec }}</div>
-                </div>
-                <div style="font-weight: bold;">{{ i.product.price_retail * i.quantity }}원</div>
-            </div>
-            {% endfor %}
-
-            <div class="summary">
-                <div class="fee-info">상품 금액: {{ sub_total }}원</div>
-                <div class="fee-info">배송비: +{{ delivery_fee }}원</div>
-                <div class="total-row">최종 결제: {{ sub_total + delivery_fee }}원</div>
-
-                {% if sub_total < min_price %}
-                    <div class="min-alert">
-                        ⚠️ <b>최소 주문 금액 부족</b><br>
-                        {{ cat }} 상품을 {{ min_price - sub_total }}원 더 담아주세요.
-                    </div>
-                    <button class="btn-pay" disabled>10,000원부터 주문 가능</button>
-                {% else %}
-                    <button class="btn-pay" onclick="alert('{{ cat }} 결제 페이지로 이동합니다.')">{{ cat }} 결제하기</button>
-                {% endif %}
-            </div>
-        </div>
+{% for cat, items in grouped_cart.items() %}
+    {% set ns = namespace(subtotal=0) %}
+    {% for item in items %}
+        {% set ns.subtotal = ns.subtotal + (item.product.price_retail * item.quantity) %}
     {% endfor %}
-</div>
+
+    <div class="cart-card">
+        <div class="cat-title">📦 {{ cat }} 배송</div>
+        
+        {% for item in items %}
+        <div class="item">
+            <div>
+                <div style="font-weight: bold;">{{ item.product.name }}</div>
+                <div style="font-size: 13px; color: #666;">{{ item.product.spec }} / {{ item.quantity }}개</div>
+            </div>
+            <div style="font-weight: bold;">{{ "{:,}".format(item.product.price_retail * item.quantity) }}원</div>
+        </div>
+        {% endfor %}
+
+        <div class="price-box">
+            <div style="color: #666;">상품 금액: {{ "{:,}".format(ns.subtotal) }}원</div>
+            <div style="color: #666;">배송비: +{{ "{:,}".format(delivery_fee) }}원</div>
+            <div class="total-row">합계: {{ "{:,}".format(ns.subtotal + delivery_fee) }}원</div>
+
+            {% if ns.subtotal < min_price %}
+                <div class="status-msg msg-error">⚠️ 10,000원 이상 담아주세요 (현재 {{ "{:,}".format(min_price - ns.subtotal) }}원 부족)</div>
+                <button class="btn-order btn-disabled" disabled>금액 부족</button>
+            {% else %}
+                <div class="status-msg msg-ok">✅ 주문 가능한 금액입니다!</div>
+                <button class="btn-order btn-ready" onclick="location.href='/order/{{ cat }}'">{{ cat }} 주문하기</button>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+
+<p style="text-align: center;"><a href="/" style="color: #2ecc71; text-decoration: none;">← 상품 더 담으러 가기</a></p>
 
 </body>
 </html>

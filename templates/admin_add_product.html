@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>신규 상품 등록</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f7f6; }
+        .form-card { background: white; padding: 25px; border-radius: 12px; max-width: 500px; margin: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
+        label { font-weight: bold; font-size: 14px; color: #555; }
+        button { width: 100%; padding: 15px; background: #2ecc71; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        button:hover { background: #27ae60; }
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #888; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h3>✨ 신규 상품 등록</h3>
+        <form method="POST">
+            <label>상품명</label>
+            <input type="text" name="name" placeholder="예: 산지직송 감자" required>
+            
+            <label>규격</label>
+            <input type="text" name="spec" placeholder="예: 1kg / 1박스">
+            
+            <label>판매 가격</label>
+            <input type="number" name="price" placeholder="숫자만 입력">
+            
+            <label>이미지 주소</label>
+            <input type="text" name="image_url" placeholder="http://...">
+
+            <label>대분류 선택</label>
+            <select name="category" required>
+                <option value="">-- 대분류를 골라주세요 --</option>
+                {% for c in main_cats %}
+                <option value="{{ c.name }}">{{ c.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label>소분류 직접 입력 (또는 선택)</label>
+            <input type="text" name="sub_category" list="sub-list" placeholder="소분류를 입력하거나 선택하세요">
+            <datalist id="sub-list">
+                {% for c in main_cats %}
+                    {% for s in c.sub_categories %}
+                    <option value="{{ s.name }}">({{ c.name }}) {{ s.name }}</option>
+                    {% endfor %}
+                {% endfor %}
+            </datalist>
+
+            <button type="submit">상품 등록하기</button>
+        </form>
+        <a href="/admin/products" class="back-link">← 돌아가기</a>
+    </div>
+</body>
+</html>
