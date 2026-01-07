@@ -228,25 +228,27 @@ def upload_excel():
     if not file: return "파일이 없습니다."
     
     try:
+        # 엑셀 읽기
         df = pd.read_excel(file, engine='openpyxl')
+        
         for _, row in df.iterrows():
             main_name = str(row['카테고리']).strip()
             sub_name = str(row['세부카테고리']).strip()
 
-            # 1. 대분류 자동 생성 (없을 때만)
+            # [핵심 추가] 1. 대분류가 Category 장부에 없으면 새로 만듭니다.
             main_cat = Category.query.filter_by(name=main_name, type='MAIN').first()
             if not main_cat:
                 main_cat = Category(name=main_name, type='MAIN')
                 db.session.add(main_cat)
-                db.session.flush() # ID를 미리 확보하기 위해 실행
+                db.session.flush() # ID를 미리 생성함 (중요!)
 
-            # 2. 소분류 자동 생성 (없을 때만)
+            # [핵심 추가] 2. 소분류가 Category 장부에 없으면 새로 만듭니다.
             sub_cat = Category.query.filter_by(name=sub_name, type='SUB', parent_id=main_cat.id).first()
             if not sub_cat:
                 sub_cat = Category(name=sub_name, type='SUB', parent_id=main_cat.id)
                 db.session.add(sub_cat)
 
-            # 3. 상품 등록
+            # 3. 상품 정보 저장
             new_p = Product(
                 name=row['상품명'], 
                 spec=row['규격'], 
@@ -258,12 +260,13 @@ def upload_excel():
             )
             db.session.add(new_p)
             
-        db.session.commit() # 모든 변경사항 한 번에 저장!
+        db.session.commit() # 모든 변경사항을 한 번에 저장!
+        print("엑셀 업로드 및 카테고리 자동 생성 완료!")
         return redirect(url_for('admin_products'))
         
     except Exception as e:
         db.session.rollback()
-        return f"엑셀 업로드 에러: {e}"
+        return f"엑셀 업로드 중 오류 발생: {e}"
 
 # --- [6. 서버 시작 시 초기화] ---
 with app.app_context():
