@@ -3,43 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>카테고리 관리 - 바구니삼촌</title>
+    <title>카테고리 관리</title>
     <style>
-        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .tag { display: inline-block; background: #e8f5e9; color: #2e7d32; padding: 5px 12px; border-radius: 20px; margin: 5px; font-size: 14px; }
-        .btn-del { color: #e74c3c; text-decoration: none; margin-left: 8px; font-weight: bold; }
-        input, select, button { padding: 10px; border-radius: 5px; border: 1px solid #ddd; }
-        button { background: #2ecc71; color: white; border: none; cursor: pointer; }
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 25px; }
+        h3 { margin-top: 0; color: #333; border-left: 4px solid #2ecc71; padding-left: 10px; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        
+        button { background: #2ecc71; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; }
+        button:hover { background: #27ae60; }
+
+        .cat-group { border: 1px solid #eee; border-radius: 8px; margin-bottom: 15px; overflow: hidden; }
+        .cat-header { background: #f9f9f9; padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
+        .cat-main-name { font-weight: bold; color: #2ecc71; }
+        .sub-list { padding: 10px 15px; background: white; display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 4px; font-size: 13px; border: 1px solid #c8e6c9; }
+        .btn-del { color: #e74c3c; text-decoration: none; margin-left: 5px; font-weight: bold; }
+        .empty-text { color: #bbb; font-size: 12px; font-style: italic; }
     </style>
 </head>
 <body>
-    <h2>📂 메뉴 카테고리 관리</h2>
-    <a href="/admin/products" style="text-decoration:none; color:#666;">⬅️ 상품 관리로 돌아가기</a>
-    <hr>
+
+<div class="container">
+    <h2>📂 카테고리(메뉴판) 정밀 관리</h2>
+    <p><a href="/admin/products" style="text-decoration:none;">⬅️ 상품 관리로 돌아가기</a></p>
 
     <div class="card">
-        <h3>➕ 새 카테고리 추가</h3>
+        <h3>➕ 신규 등록</h3>
         <form method="post">
-            <input type="text" name="name" placeholder="이름 (예: 냉동식품)" required>
-            <select name="type">
-                <option value="MAIN">대분류 (상단 탭)</option>
-                <option value="SUB">소분류 (식자재 세부)</option>
-            </select>
-            <button type="submit">등록</button>
+            <div class="form-group">
+                <label>분류 이름</label>
+                <input type="text" name="name" placeholder="예: 과일, 채소, 캠핑용품 등" required>
+            </div>
+            
+            <div class="form-group">
+                <label>분류 종류</label>
+                <select name="type" id="type-select" onchange="toggleParent()">
+                    <option value="MAIN">대분류 (가장 큰 메뉴)</option>
+                    <option value="SUB">소분류 (대분류에 속하는 하위 메뉴)</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="parent-group" style="display:none;">
+                <label>소속될 대분류 선택</label>
+                <select name="parent_id">
+                    <option value="">-- 어느 대분류 아래에 넣을까요? --</option>
+                    {% for c in main_cats %}
+                    <option value="{{ c.id }}">{{ c.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit">카테고리 생성</button>
         </form>
     </div>
 
     <div class="card">
-        <h3>📍 현재 대분류</h3>
+        <h3>📍 현재 메뉴 구조</h3>
         {% for c in main_cats %}
-        <span class="tag">{{ c.name }} <a href="/admin/category/delete/{{ c.id }}" class="btn-del" onclick="return confirm('삭제할까요?')">×</a></span>
-        {% endfor %}
-        
-        <h3 style="margin-top:30px;">📍 현재 식자재 소분류</h3>
-        {% for c in sub_cats %}
-        <span class="tag">{{ c.name }} <a href="/admin/category/delete/{{ c.id }}" class="btn-del" onclick="return confirm('삭제할까요?')">×</a></span>
+        <div class="cat-group">
+            <div class="cat-header">
+                <span class="cat-main-name">이름: {{ c.name }} (대분류)</span>
+                <a href="/admin/category/delete/{{ c.id }}" class="btn-del" onclick="return confirm('대분류를 지우면 속한 소분류도 안 보일 수 있습니다. 삭제할까요?')">전체삭제</a>
+            </div>
+            <div class="sub-list">
+                {% if c.sub_categories %}
+                    {% for sub in c.sub_categories %}
+                    <span class="tag">
+                        {{ sub.name }} 
+                        <a href="/admin/category/delete/{{ sub.id }}" class="btn-del">×</a>
+                    </span>
+                    {% endfor %}
+                {% else %}
+                    <span class="empty-text">등록된 소분류가 없습니다.</span>
+                {% endif %}
+            </div>
+        </div>
         {% endfor %}
     </div>
+</div>
+
+<script>
+function toggleParent() {
+    var type = document.getElementById('type-select').value;
+    var parentGroup = document.getElementById('parent-group');
+    if (type === 'SUB') {
+        parentGroup.style.display = 'block';
+    } else {
+        parentGroup.style.display = 'none';
+    }
+}
+</script>
+
 </body>
 </html>
