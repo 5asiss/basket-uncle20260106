@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'ba
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# --- [모델] ---
+# --- [DB 모델 설정] ---
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -26,36 +26,34 @@ class Product(db.Model):
     category = db.Column(db.String(50))
     image_url = db.Column(db.String(500))
 
-class Cart(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
-    quantity = db.Column(db.Integer, default=1)
-    product = db.relationship('Product')
-
-# --- [로그인 설정] ---
+# --- [로그인 엔진 설정] ---
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'login' # 로그인 안 됐을 때 보낼 곳
 
 @login_manager.user_loader
 def load_user(user_id): return User.query.get(int(user_id))
 
-# --- [주요 경로] ---
+# --- [페이지 경로 설정] ---
+
 @app.route('/')
 def index():
     products = Product.query.all()
-    # 상단 탭을 위해 카테고리 중복 없이 가져오기
-    categories = db.session.query(Product.category).distinct().all()
-    return render_template('index.html', products=products, categories=[c[0] for c in categories if c[0]])
+    # 상품이 있는 카테고리들만 추출
+    cats = db.session.query(Product.category).distinct().all()
+    categories = [c[0] for c in cats if c[0]]
+    return render_template('index.html', products=products, categories=categories)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user = User.query.filter_by(email=request.form.get('email')).first()
-        if user and check_password_hash(user.password, request.form.get('password')):
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = User.query.filter_by(email=email).first()
+        if user and check_password_hash(user.password, password):
             login_user(user)
             return redirect(url_for('index'))
+        flash("이메일 또는 비밀번호가 틀렸습니다.")
     return render_template('login.html')
 
 @app.route('/logout')
@@ -63,7 +61,6 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# --- [관리자 기능: 상품 관리 & 등록] ---
 @app.route('/admin/products')
 @login_required
 def admin_products():
@@ -75,7 +72,6 @@ def admin_products():
 @login_required
 def add_product():
     if not current_user.is_admin: return "권한 없음"
-    
     if request.method == 'POST':
         new_p = Product(
             name=request.form.get('name'),
@@ -87,30 +83,13 @@ def add_product():
         db.session.commit()
         return redirect(url_for('admin_products'))
     
-    # DB에 등록된 카테고리 목록을 가져와서 등록 화면에 뿌려줍니다.
+    # 등록 화면에서 선택할 카테고리 목록 (기본값 제공)
     cats = db.session.query(Product.category).distinct().all()
     main_cats = [c[0] for c in cats if c[0]]
-    if not main_cats: main_cats = ['식자재', '과일', '채소'] # 기본값
-    
+    if not main_cats: main_cats = ['과일', '채소', '식자재']
     return render_template('admin_add_product.html', main_cats=main_cats)
 
-@app.route('/add/<int:p_id>')
-def add_to_cart(p_id):
-    new_item = Cart(user_id=1, product_id=p_id) 
-    db.session.add(new_item)
-    db.session.commit()
-    return redirect('/cart')
-
-@app.route('/cart')
-def view_cart():
-    items = Cart.query.all()
-    grouped = {}
-    for i in items:
-        cat = i.product.category if i.product.category else "미분류"
-        if cat not in grouped: grouped[cat] = []
-        grouped[cat].append(i)
-    return render_template('cart.html', grouped_cart=grouped, min_price=10000, delivery_fee=1900)
-
+# --- [DB 초기화 및 관리자 생성] ---
 with app.app_context():
     db.create_all()
     if not User.query.filter_by(email='admin@test.com').first():
@@ -119,4 +98,4 @@ with app.app_context():
         db.session.commit()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
