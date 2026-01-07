@@ -1,289 +1,113 @@
 import os
 import pandas as pd
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'basket-uncle-1234'
+app.config['SECRET_KEY'] = 'basket-1234'
 basedir = os.path.abspath(os.path.dirname(__file__))
-# DB 파일명을 v12로 설정하여 깨끗하게 시작합니다.
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'basket_v12.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# --- [1. 데이터 모델: 설계도들이 맨 위에 있어야 에러가 안 납니다] ---
-
+# --- [설계도: 유저, 카테고리, 상품, 장바구니] ---
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    name = db.Column(db.String(50))
-    grade = db.Column(db.String(20), default='RETAIL')
     is_admin = db.Column(db.Boolean, default=False)
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     type = db.Column(db.String(20)) # 'MAIN' 또는 'SUB'
-    parent_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=True)
-    sub_categories = db.relationship('Category', backref=db.backref('parent', remote_side=[id]), lazy='joined')
+    parent_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    sub_categories = db.relationship('Category', backref=db.backref('parent', remote_side=[id]))
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100))
     spec = db.Column(db.String(100))
     price_retail = db.Column(db.Integer)
-    price_wholesale = db.Column(db.Integer)
     category = db.Column(db.String(50))
     sub_category = db.Column(db.String(50))
     image_url = db.Column(db.String(500))
-    is_active = db.Column(db.Boolean, default=True)
 
-class Cart(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
-    quantity = db.Column(db.Integer, default=1)
-    product = db.relationship('Product')
-
-# --- [2. 설정 및 로그인 매니저] ---
-login_manager = LoginManager()
-login_manager.login_view = 'login'
-login_manager.init_app(app)
-
+# --- [로그인 설정] ---
+login_manager = LoginManager(); login_manager.init_app(app); login_manager.login_view = 'login'
 @login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+def load_user(user_id): return User.query.get(int(user_id))
 
-# --- [3. 사용자 화면 경로] ---
-
+# --- [주요 화면들] ---
 @app.route('/')
 def index():
-    cat_name = request.args.get('cat')
-    sub_name = request.args.get('sub')
-    query = Product.query.filter_by(is_active=True)
-    if cat_name: query = query.filter_by(category=cat_name)
-    if sub_name: query = query.filter_by(sub_category=sub_name)
-    products = query.all()
-    main_cats = Category.query.filter_by(type='MAIN').all()
-    return render_template('index.html', products=products, current_cat=cat_name, current_sub=sub_name, main_cats=main_cats)
+    products = Product.query.all()
+    return render_template('index.html', products=products)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
-        print(f"로그인 시도: {email}")  # [체크 1] 버튼 누르면 터미널에 이게 뜨나요?
-
-        user = User.query.filter_by(email=email).first()
-        
-        if user:
-            print(f"사용자 발견: {user.email}") # [체크 2] DB에 사용자가 있는지 확인
-            if check_password_hash(user.password, password):
-                print("비밀번호 일치! 로그인 성공")
-                login_user(user)
-                return redirect(url_for('index'))
-            else:
-                print("비밀번호 불일치 에러")
-        else:
-            print("사용자를 찾을 수 없음 (DB에 계정이 없음)")
-            
+        user = User.query.filter_by(email=request.form['email']).first()
+        if user and check_password_hash(user.password, request.form['password']):
+            login_user(user)
+            return redirect('/')
     return render_template('login.html')
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        hashed_pw = generate_password_hash(request.form['password'])
-        new_user = User(email=request.form['email'], password=hashed_pw, name=request.form['name'])
-        db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for('login'))
-    return render_template('register.html')
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
-
-# --- [4. 장바구니 기능] ---
-
-@app.route('/add_to_cart/<int:product_id>')
-@login_required
-def add_to_cart(product_id):
-    item = Cart.query.filter_by(user_id=current_user.id, product_id=product_id).first()
-    if item:
-        item.quantity += 1
-    else:
-        new_item = Cart(user_id=current_user.id, product_id=product_id)
-        db.session.add(new_item)
-    db.session.commit()
-    return redirect(url_for('cart_page'))
-
-@app.route('/cart')
-@login_required
-def cart_page():
-    cart_items = Cart.query.filter_by(user_id=current_user.id).all()
-    grouped_cart = {}
-    
-    for item in cart_items:
-        # 엑셀이나 DB에서 카테고리가 비어있을 경우를 대비해 '기본' 처리
-        cat = item.product.category if item.product.category else "기본배송"
-        if cat not in grouped_cart:
-            grouped_cart[cat] = []
-        grouped_cart[cat].append(item)
-    
-    # 설정값 (숫자로 확실히 고정)
-    return render_template('cart.html', 
-                           grouped_cart=grouped_cart, 
-                           min_price=10000, 
-                           delivery_fee=1900)
-# --- [5. 관리자 기능: 카테고리 & 상품 & 엑셀] ---
-
-@app.route('/admin/categories', methods=['GET', 'POST'])
-@login_required
-def admin_categories():
-    if not current_user.is_admin: return "권한 없음"
-    if request.method == 'POST':
-        name = request.form.get('name')
-        cat_type = request.form.get('type')
-        p_id = request.form.get('parent_id')
-        if name:
-            new_cat = Category(name=name, type=cat_type, parent_id=p_id if p_id else None)
-            db.session.add(new_cat)
-            db.session.commit()
-        return redirect(url_for('admin_categories'))
-    main_cats = Category.query.filter_by(type='MAIN').all()
-    return render_template('admin_categories.html', main_cats=main_cats)
-
-@app.route('/admin/category/delete/<int:id>')
-@login_required
-def delete_category(id):
-    if not current_user.is_admin: return "권한 없음"
-    cat = Category.query.get(id)
-    if cat:
-        db.session.delete(cat)
-        db.session.commit()
-    return redirect(url_for('admin_categories'))
-
-@app.route('/admin/products')
-@login_required
-def admin_products():
-    if not current_user.is_admin: return "권한 없음"
-    products = Product.query.all()
-    return render_template('admin_products.html', products=products)
+# --- [상품 등록 화면 (여기가 핵심!)] ---
 @app.route('/admin/product/add', methods=['GET', 'POST'])
 @login_required
 def add_product():
-    if not current_user.is_admin:
-        return "권한이 없습니다."
+    if not current_user.is_admin: return "권한 없음"
     
     if request.method == 'POST':
-        try:
-            # 1. 폼 데이터 가져오기
-            name = request.form.get('name')
-            spec = request.form.get('spec')
-            price_str = request.form.get('price')
-            category = request.form.get('category')
-            sub_category = request.form.get('sub_category')
-            image_url = request.form.get('image_url')
-
-            # 2. 가격 숫자로 변환 (입력 안 했으면 0원)
-            price = int(price_str) if price_str and price_str.isdigit() else 0
-
-            # 3. DB에 저장
-            new_p = Product(
-                name=name, 
-                spec=spec, 
-                price_retail=price,
-                category=category, 
-                sub_category=sub_category, 
-                image_url=image_url
-            )
-            db.session.add(new_p)
-            db.session.commit()
-            
-            # 4. 성공 시 상품 목록으로 강제 이동
-            print(f"상품 등록 성공: {name}")
-            return redirect('/admin/products') 
-
-        except Exception as e:
-            db.session.rollback() # 에러 나면 장부 취소
-            return f"등록 중 오류 발생: {e}" # 로딩 대신 에러 메시지 출력
-
-    # GET 요청 시 화면 보여주기
-    main_cats = Category.query.filter_by(type='MAIN').all()
-    return render_template('admin_add_product.html', main_cats=main_cats)
+        # 1. 폼에서 입력한 정보 가져오기
+        new_p = Product(
+            name=request.form.get('name'),
+            spec=request.form.get('spec'),
+            price_retail=int(request.form.get('price')) if request.form.get('price') else 0,
+            category=request.form.get('category'),
+            sub_category=request.form.get('sub_category'),
+            image_url=request.form.get('image_url')
+        )
+        # 2. DB에 저장하기
+        db.session.add(new_p)
+        db.session.commit()
+        
+        # [중요!] 저장이 끝나면 '상품 관리' 페이지로 자동으로 보냅니다.
+        return redirect(url_for('admin_products')) 
     
-    # 등록 화면으로 갈 때 현재 있는 카테고리 목록을 다 가져갑니다
+    # 처음 화면을 열 때는 카테고리 목록을 챙겨서 보여줍니다.
     main_cats = Category.query.filter_by(type='MAIN').all()
     return render_template('admin_add_product.html', main_cats=main_cats)
+
+# --- [엑셀 업로드 (자동 카테고리 생성 포함)] ---
 @app.route('/admin/upload/excel', methods=['POST'])
 @login_required
 def upload_excel():
-    if not current_user.is_admin: return "권한 없음"
     file = request.files.get('file')
-    if not file: return "파일이 없습니다."
-    
-    try:
-        # 엑셀 읽기
-        df = pd.read_excel(file, engine='openpyxl')
+    df = pd.read_excel(file, engine='openpyxl')
+    for _, row in df.iterrows():
+        m_name = str(row['카테고리']).strip()
+        # 카테고리 장부에 없으면 즉시 추가
+        if not Category.query.filter_by(name=m_name, type='MAIN').first():
+            db.session.add(Category(name=m_name, type='MAIN'))
+            db.session.flush()
         
-        for _, row in df.iterrows():
-            main_name = str(row['카테고리']).strip()
-            sub_name = str(row['세부카테고리']).strip()
-
-            # [핵심 추가] 1. 대분류가 Category 장부에 없으면 새로 만듭니다.
-            main_cat = Category.query.filter_by(name=main_name, type='MAIN').first()
-            if not main_cat:
-                main_cat = Category(name=main_name, type='MAIN')
-                db.session.add(main_cat)
-                db.session.flush() # ID를 미리 생성함 (중요!)
-
-            # [핵심 추가] 2. 소분류가 Category 장부에 없으면 새로 만듭니다.
-            sub_cat = Category.query.filter_by(name=sub_name, type='SUB', parent_id=main_cat.id).first()
-            if not sub_cat:
-                sub_cat = Category(name=sub_name, type='SUB', parent_id=main_cat.id)
-                db.session.add(sub_cat)
-
-            # 3. 상품 정보 저장
-            new_p = Product(
-                name=row['상품명'], 
-                spec=row['규격'], 
-                price_retail=int(row['가격']),
-                price_wholesale=int(row['가격']*0.9), 
-                category=main_name, 
-                sub_category=sub_name,
-                image_url=f"/static/product_images/{row['이미지파일명']}"
-            )
-            db.session.add(new_p)
-            
-        db.session.commit() # 모든 변경사항을 한 번에 저장!
-        print("엑셀 업로드 및 카테고리 자동 생성 완료!")
-        return redirect(url_for('admin_products'))
-        
-    except Exception as e:
-        db.session.rollback()
-        return f"엑셀 업로드 중 오류 발생: {e}"
-
-# --- [6. 서버 시작 시 초기화] ---
-with app.app_context():
-    # 1. 먼저 장부(테이블)를 생성합니다.
-    db.create_all() 
-    
-    # 2. 그 다음에 관리자가 있는지 확인하고 만듭니다.
-    if not User.query.filter_by(email='admin@test.com').first():
-        admin = User(
-            email='admin@test.com', 
-            password=generate_password_hash('1234'), 
-            name='관리자', 
-            is_admin=True
+        new_p = Product(
+            name=row['상품명'], spec=row['규격'], price_retail=int(row['가격']),
+            category=m_name, sub_category=str(row['세부카테고리']),
+            image_url=f"/static/product_images/{row['이미지파일명']}"
         )
-        db.session.add(admin)
-        db.session.commit()
-        print("관리자 계정 생성 완료!")
+        db.session.add(new_p)
+    db.session.commit()
+    return redirect('/admin/products')
 
-if __name__ == '__main__':
-    app.run(debug=True)
+with app.app_context():
+    db.create_all()
+    if not User.query.filter_by(email='admin@test.com').first():
+        db.session.add(User(email='admin@test.com', password=generate_password_hash('1234'), is_admin=True))
+        db.session.commit()
+
+if __name__ == '__main__': app.run(debug=True)
