@@ -4,37 +4,32 @@
     <meta charset="UTF-8">
     <title>상품 등록</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-        .box { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
+        .box { max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background: white; }
         input, select { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
         button { width: 100%; padding: 10px; background: #2ecc71; color: white; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="box">
-        <h3>✨ 상품 직접 등록</h3>
+        <h3>✨ 새 상품 등록</h3>
         <form method="POST">
             <input type="text" name="name" placeholder="상품명" required>
-            <input type="text" name="spec" placeholder="규격 (예: 1kg)">
-            <input type="number" name="price" placeholder="가격 (숫자만)">
-            <input type="text" name="image_url" placeholder="이미지 주소">
-
-            <label>대분류 선택</label>
+            <input type="number" name="price" placeholder="판매 가격" required>
+            <input type="text" name="image_url" placeholder="이미지 주소 (URL)">
+            
+            <label>카테고리 선택</label>
             <select name="category" required>
-                <option value="">-- 대분류를 고르세요 --</option>
-                {% for c in main_cats %}
-                <option value="{{ c.name }}">{{ c.name }}</option>
+                <option value="">-- 카테고리를 고르세요 --</option>
+                {% for cat in main_cats %}
+                <option value="{{ cat }}">{{ cat }}</option>
                 {% endfor %}
             </select>
-
-            <input type="text" name="sub_category" placeholder="소분류 입력">
+            
+            <p style="font-size: 12px; color: #888;">* 카테고리가 없으면 엑셀을 먼저 업로드하거나 DB를 확인하세요.</p>
+            
             <button type="submit">등록하기</button>
-        </form><div style="margin-top: 20px; text-align: center;">
-            <a href="/admin/products" style="text-decoration: none; color: #666; font-size: 14px; border: 1px solid #ddd; padding: 10px 20px; border-radius: 5px; display: inline-block;">
-                ← 등록 취소하고 목록으로 돌아가기
-            </a>
-        </div>
-    </div> </body>
+            <a href="/admin/products" style="display:block; text-align:center; margin-top:15px; color:#999; text-decoration:none;">취소</a>
+        </form>
     </div>
 </body>
 </html>
