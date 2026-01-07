@@ -84,18 +84,21 @@ def admin_add_product_page():
 
 # --- [카테고리 관리: 보여주기 + 추가하기 합친 코드] ---
 
-@app.route('/admin/categories', methods=['GET', 'POST'])
+# 주소를 /admin/category-manage 로 살짝 바꿔서 서버가 새 경로로 인식하게 합니다.
+# 주소 뒤에 -new를 붙여서 서버가 "이건 새로운 길이다!"라고 인식하게 만듭니다.
+@app.route('/admin/categories-new', methods=['GET', 'POST'])
 def admin_categories_page():
     if not session.get('is_admin'): return "권한 없음"
     
     if request.method == 'POST':
         new_name = request.form.get('name')
         if new_name and new_name not in CATEGORIES:
-            CATEGORIES.append(new_name) # 임시로 리스트에 추가 (새로고침 전까지 유지)
+            CATEGORIES.append(new_name)
         return redirect(url_for('admin_categories_page'))
         
     return render_template('admin_categories.html', categories=CATEGORIES)
-
+        
+    return render_template('admin_categories.html', categories=CATEGORIES)
 @app.route('/admin/orders')
 def admin_orders_page():
     conn = get_db_conn()
