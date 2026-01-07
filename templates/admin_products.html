@@ -46,11 +46,15 @@
 
         <input type="text" name="image_url" placeholder="이미지 주소 (https://...)" style="padding:10px; border:1px solid #ddd; border-radius:5px;">
         
-        <select name="category" style="padding:10px; border:1px solid #ddd; border-radius:5px;">
-            <option value="농산물직거래">🚜 농산물직거래</option>
-            <option value="식자재마트">🛒 식자재마트</option>
-            <option value="다이소">📦 다이소</option>
-        </select>
+        <label>대분류 선택</label>
+<select name="category" required>
+    <option value="">-- 카테고리를 선택하세요 --</option>
+    
+    {# 서버(app.py)에서 보내준 16개 카테고리 목록을 하나씩 꺼내서 메뉴로 만듭니다 #}
+    {% for cat in main_cats %}
+        <option value="{{ cat }}">{{ cat }}</option>
+    {% endfor %}
+</select>
         
         <button type="submit" style="background:#2ecc71; color:white; padding:15px; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">상품 등록하기</button>
     </form>
