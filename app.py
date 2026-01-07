@@ -109,5 +109,23 @@ with app.app_context():
     if not User.query.filter_by(email='admin@test.com').first():
         db.session.add(User(email='admin@test.com', password=generate_password_hash('1234'), is_admin=True))
         db.session.commit()
+# --- [화면 연결 경로: 404 에러 해결용] ---
 
+@app.route('/admin/products')
+def admin_products_page():
+    # 관리자 페이지(화면)를 보여줍니다.
+    conn = get_db_conn()
+    products = [dict(row) for row in conn.execute("SELECT * FROM products").fetchall()]
+    conn.close()
+    return render_template('admin_products.html', products=products)
+
+@app.route('/admin/categories')
+def admin_categories_page():
+    # 카테고리 관리 화면을 보여줍니다.
+    return render_template('admin_categories.html', categories=CATEGORIES)
+
+@app.route('/admin/product/add')
+def admin_add_product_page():
+    # 상품 등록 화면을 보여줍니다.
+    return render_template('admin_add_product.html', main_cats=CATEGORIES)
 if __name__ == '__main__': app.run(debug=True)
