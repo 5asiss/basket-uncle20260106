@@ -74,15 +74,23 @@
     {% endfor %}
 </div>
 
-{% if current_cat == '식자재마트' %}
-<div class="tabs" style="background:#f9f9f9; border-top: none;">
-    <a href="/?cat=식자재마트" class="tab-item {{ 'active' if not current_sub }}" style="font-size:12px;">전체보기</a>
-    {% for s in sub_cats %}
-    <a href="/?cat=식자재마트&sub={{ s.name }}" class="tab-item {{ 'active' if current_sub == s.name }}" style="font-size:12px;">{{ s.name }}</a>
+{% if current_cat %}
+    {% set ns = namespace(found_cat=None) %}
+    {% for c in main_cats %}
+        {% if c.name == current_cat %}
+            {% set ns.found_cat = c %}
+        {% endif %}
     {% endfor %}
-</div>
-{% endif %}
 
+    {% if ns.found_cat and ns.found_cat.sub_categories %}
+    <div class="tabs" style="background:#f9f9f9; border-top: none; border-bottom: 1px solid #ddd; padding: 5px 10px;">
+        <a href="/?cat={{ current_cat }}" class="tab-item {{ 'active' if not current_sub }}" style="font-size:12px; padding: 5px 12px;">전체보기</a>
+        {% for s in ns.found_cat.sub_categories %}
+        <a href="/?cat={{ current_cat }}&sub={{ s.name }}" class="tab-item {{ 'active' if current_sub == s.name }}" style="font-size:12px; padding: 5px 12px;">{{ s.name }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endif %}
 <div class="product-grid">
     {% for p in products %}
     <div class="product-card">
