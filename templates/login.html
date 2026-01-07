@@ -1,29 +1,103 @@
 <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <style>
+        body { font-family: sans-serif; background: #f9f9f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 280px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #2ecc71; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2 style="text-align:center; color:#2ecc71;">로그인</h2>
+        <form method="POST">
+            <input type="email" name="email" placeholder="이메일 (admin@test.com)" required>
+            <input type="password" name="password" placeholder="비밀번호 (1234)" required>
+            <button type="submit">로그인하기</button>
+        </form>
+    </div>
+</body>
+</html><!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그인 - 바구니삼촌</title>
+    <title>바구니삼촌 - 구매대행</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-box { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; }
-        h2 { text-align: center; color: #2ecc71; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .info { font-size: 12px; color: #888; text-align: center; margin-top: 15px; }
+        :root { --main-color: #2ecc71; --point-color: #e67e22; --bg-color: #f9f9f9; }
+        body { font-family: sans-serif; background-color: var(--bg-color); margin: 0; padding: 0; color: #333; }
+        header { background-color: white; padding: 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .logo { font-size: 28px; font-weight: bold; color: var(--main-color); text-decoration: none; }
+        .nav { margin-top: 15px; }
+        .nav a { margin: 0 10px; text-decoration: none; color: #666; font-size: 14px; }
+        
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+        
+        /* 상품 그리드: 모바일에서 2열 고정 */
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; }
+        
+        /* 쿠팡 스타일 상품 카드 */
+        .product-card { background: white; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #eee; }
+        .product-img { width: 100%; aspect-ratio: 1 / 1; background-color: #f9f9f9; display: flex; align-items: center; justify-content: center; }
+        .product-img img { width: 100%; height: 100%; object-fit: cover; }
+        .product-info { padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+        .product-name { font-size: 13px; color: #333; line-height: 1.4; height: 38px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-line-clamp: 2;
+line-clamp: 2; /* 이 줄을 바로 밑에 복사해서 붙여넣으세요 */-webkit-box-orient: vertical; }
+        .product-spec { font-size: 11px; color: #888; }
+        .product-price { font-size: 15px; font-weight: bold; color: #ae0000; }
+        
+        /* 탭 버튼 스타일 */
+        .tabs { overflow-x: auto; white-space: nowrap; padding: 10px; background: white; margin-bottom: 10px; }
+        .tab-btn { padding: 8px 15px; text-decoration: none; border-radius: 20px; font-size: 13px; display: inline-block; margin-right: 5px; }
+        .tab-active { background-color: var(--main-color); color: white; }
+        .tab-inactive { background-color: #eee; color: #666; }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <h2>로그인</h2>
-        <form action="/login" method="POST">
-            <input type="text" name="id" placeholder="아이디 또는 이메일" required>
-            <input type="password" name="password" placeholder="비밀번호" required>
-            <button type="submit">로그인하기</button>
-        </form>
-        <div class="info">
-            관리자 테스트용: admin / 3150
-        </div>
+
+<header>
+    <a href="/" class="logo">🧺 바구니삼촌</a>
+    <div class="nav">
+        {% if current_user.is_authenticated %}
+            <span>{{ current_user.email }}</span>
+            <a href="/logout">로그아웃</a>
+            {% if current_user.is_admin %}<a href="/admin/products" style="color:blue;">[관리]</a>{% endif %}
+        {% else %}
+            <a href="/login">로그인</a>
+        {% endif %}
     </div>
+</header>
+
+<div class="tabs">
+    <a href="/" class="tab-btn {{ 'tab-active' if not current_cat else 'tab-inactive' }}">전체</a>
+    {% for cat in categories %}
+    <a href="/?cat={{ cat }}" class="tab-btn {{ 'tab-active' if current_cat == cat else 'tab-inactive' }}">{{ cat }}</a>
+    {% endfor %}
+</div>
+
+<div class="container">
+    <div class="product-grid">
+        {% for p in products %}
+        <div class="product-card">
+            <div class="product-img">
+                {% if p.image_url %}
+                    <img src="{{ p.image_url }}" alt="{{ p.name }}">
+                {% else %}
+                    <span>🥦</span>
+                {% endif %}
+            </div>
+            <div class="product-info">
+                <div class="product-name">{{ p.name }}</div>
+                <div class="product-spec">{{ p.spec if p.spec else '' }}</div>
+                <div class="product-price">{{ "{:,}".format(p.price_retail) }}원</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 </body>
 </html>
