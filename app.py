@@ -225,20 +225,45 @@ def add_product():
 def upload_excel():
     if not current_user.is_admin: return "권한 없음"
     file = request.files.get('file')
+    if not file: return "파일이 없습니다."
+    
     try:
         df = pd.read_excel(file, engine='openpyxl')
         for _, row in df.iterrows():
+            main_name = str(row['카테고리']).strip()
+            sub_name = str(row['세부카테고리']).strip()
+
+            # 1. 대분류 자동 생성 (없을 때만)
+            main_cat = Category.query.filter_by(name=main_name, type='MAIN').first()
+            if not main_cat:
+                main_cat = Category(name=main_name, type='MAIN')
+                db.session.add(main_cat)
+                db.session.flush() # ID를 미리 확보하기 위해 실행
+
+            # 2. 소분류 자동 생성 (없을 때만)
+            sub_cat = Category.query.filter_by(name=sub_name, type='SUB', parent_id=main_cat.id).first()
+            if not sub_cat:
+                sub_cat = Category(name=sub_name, type='SUB', parent_id=main_cat.id)
+                db.session.add(sub_cat)
+
+            # 3. 상품 등록
             new_p = Product(
-                name=row['상품명'], spec=row['규격'], price_retail=int(row['가격']),
-                price_wholesale=int(row['가격']*0.9), category=str(row['카테고리']), 
-                sub_category=str(row['세부카테고리']),
+                name=row['상품명'], 
+                spec=row['규격'], 
+                price_retail=int(row['가격']),
+                price_wholesale=int(row['가격']*0.9), 
+                category=main_name, 
+                sub_category=sub_name,
                 image_url=f"/static/product_images/{row['이미지파일명']}"
             )
             db.session.add(new_p)
-        db.session.commit()
+            
+        db.session.commit() # 모든 변경사항 한 번에 저장!
         return redirect(url_for('admin_products'))
-    except Exception as e: return f"에러: {e}"
-    
+        
+    except Exception as e:
+        db.session.rollback()
+        return f"엑셀 업로드 에러: {e}"
 
 # --- [6. 서버 시작 시 초기화] ---
 with app.app_context():
