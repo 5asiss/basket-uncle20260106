@@ -98,41 +98,38 @@
 </div>
 {% endif %}
 <div class="product-grid">
-   {% for p in products %}
-<div class="product-card">
-    <img src="{{ p.image_url }}" alt="">
-    <div class="p-name">{{ p.name }}</div>
-    <div class="p-spec">{{ p.spec }}</div>
-    <div class="p-price">{{ p.price_retail }}원</div>
-   <a href="/add/{{ p.id }}" style="display:block; text-align:center; background:#2ecc71; color:white; padding:10px; border-radius:5px; text-decoration:none;">
-    🛒 장바구니 담기
-</a>
-    </a>
-</div>
-{% endfor %}
+    {% for p in products %}
+    <div class="product-card">
+        <div class="img-box">
+            {% if p.image_url %}
+                <img src="{{ p.image_url }}" alt="{{ p.name }}">
+            {% else %}
+                <div class="no-img">🥦</div>
+            {% endif %}
+        </div>
+        
         <div class="info-box">
             <div class="p-name">{{ p.name }}</div>
             <div class="p-spec">{{ p.spec if p.spec else '' }}</div>
             <div class="p-price">
-                
                 {% if current_user.is_authenticated and current_user.grade == 'WHOLESALE' %}
                     {{ "{:,}".format(p.price_wholesale) }}<small>원 (도매)</small>
                 {% else %}
                     {{ "{:,}".format(p.price_retail) }}<small>원</small>
                 {% endif %}
             </div>
+            
             <a href="{{ url_for('add_to_cart', product_id=p.id) }}" style="display:block; text-align:center; background:#2ecc71; color:white; text-decoration:none; padding:10px; border-radius:5px; margin-top:10px; font-weight:bold;">
-    🛒 장바구니 담기
-</a>
+                🛒 장바구니 담기
+            </a>
         </div>
     </div>
-    {% endfor %}
-</div>
+    {% endfor %} </div>
 
 {% if current_user.is_admin %}
-<div style="margin-top: 30px; border-top: 1px dashed #ddd;">
+<div style="margin-top: 30px; border-top: 1px dashed #ddd; padding: 20px;">
     <a href="/admin/products" class="admin-link">🛠️ 상품 관리</a>
-    <a href="/admin/categories" class="admin-link" style="padding-top:0;">📂 카테고리 관리</a>
+    <a href="/admin/categories" class="admin-link" style="padding-top:10px; display:block; text-decoration:none; color:#666;">📂 카테고리 관리</a>
 </div>
 {% endif %}
 
