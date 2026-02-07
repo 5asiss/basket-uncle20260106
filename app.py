@@ -34,6 +34,38 @@ db_path = os.path.join(BASE_DIR, 'direct_trade_mall.db')
 delivery_db_path = os.path.join(BASE_DIR, 'delivery.db')
 
 app = Flask(__name__)
+# ... (기존 설정들: secret_key, config 등) ...
+
+# [중요] 초기화 함수를 함수 밖으로 꺼내서 Gunicorn이 읽을 수 있게 합니다.
+def initialize_database():
+    with app.app_context():
+        try:
+            # 1. 테이블 생성
+            db.create_all()
+            
+            # 2. SQLite 컬럼 패치
+            from sqlalchemy import text
+            alter_queries = [
+                'ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0',
+                'ALTER TABLE "order" ADD COLUMN settled_at DATETIME'
+            ]
+            for query in alter_queries:
+                try:
+                    db.session.execute(text(query))
+                    db.session.commit()
+                except Exception:
+                    db.session.rollback()
+
+            # 3. 테스트 데이터 생성 (최저가 쇼핑몰 100개 상품)
+            init_db() 
+            print("✅ Database & Test Data initialized successfully.")
+        except Exception as e:
+            print(f"❌ Initialization Error: {e}")
+
+# 앱이 로드될 때 즉시 실행
+initialize_database()
+
+# ... (이후 라우트 함수들: @app.route 등) ...
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "low_price_mall_key_2026")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", f"sqlite:///{db_path}")
