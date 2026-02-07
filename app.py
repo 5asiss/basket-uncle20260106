@@ -14,7 +14,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from sqlalchemy import text
-from delivery_system import logi_bp, db_delivery
+
 load_dotenv()
 
 # --------------------------------------------------------------------------------
@@ -64,13 +64,13 @@ def force_init_db():
 # ... (기존 설정들: secret_key, config 등) ...
 
 # [중요] 초기화 함수를 함수 밖으로 꺼내서 Gunicorn이 읽을 수 있게 합니다.
-def initialize_database():
+def finalize_setup():
     with app.app_context():
         try:
-            # 모든 테이블 생성
+            # 1) 테이블 생성
             db.create_all()
             
-            # SQLite 필수 컬럼 패치
+            # 2) SQLite 필수 컬럼 패치
             from sqlalchemy import text
             alter_queries = [
                 'ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0',
@@ -83,25 +83,35 @@ def initialize_database():
                 except Exception:
                     db.session.rollback()
 
-            # 배송 관리자 생성
-            try:
-                from delivery_system import AdminUser
-                if not AdminUser.query.filter_by(username='admin').first():
-                    db.session.add(AdminUser(username="admin", password="1234"))
-                    db.session.commit()
-            except Exception as e:
-                print(f"배송 관리자 정보: {e}")
+            # 3) [중요] 어드민 계정 강제 생성 (로그인 안되는 문제 해결)
+            admin_email = "admin@uncle.com"
+            admin = User.query.filter_by(email=admin_email).first()
+            if not admin:
+                new_admin = User(
+                    email=admin_email,
+                    password=generate_password_hash("1234"), # 비밀번호: 1234
+                    name="운영자",
+                    is_admin=True
+                )
+                db.session.add(new_admin)
+                db.session.commit()
+                print(f"✅ [Admin] 계정 생성 완료: {admin_email}")
+            else:
+                # 이미 있다면 어드민 권한과 비밀번호 재설정 (확실한 로그인을 위해)
+                admin.is_admin = True
+                admin.password = generate_password_hash("1234")
+                db.session.commit()
+                print("✅ [Admin] 기존 계정 권한 확인 및 비밀번호 초기화 완료")
 
-            # 100개 상품 데이터 생성 (기존에 정의한 init_db 함수 호출)
-            init_db() 
-            print("✅ [Success] 데이터베이스 및 100개 상품 초기화 완료")
+            # 4) 배송 시스템 관리자 및 테스트 데이터 생성
+            init_db() # 100개 상품 생성 함수
+            print("✅ [Success] 초기화 프로세스 전체 완료")
             
         except Exception as e:
             print(f"❌ [Error] 초기화 중 오류 발생: {e}")
 
 # --- Flask 설정부 ---
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "low_price_mall_key_2026")
-
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", f"sqlite:///{db_path}")
 app.config['SQLALCHEMY_BINDS'] = {
     'delivery': os.getenv("DELIVERY_DATABASE_URL", f"sqlite:///{delivery_db_path}")
@@ -4573,14 +4583,13 @@ if __name__ == "__main__":
             db.session.add(AdminUser(username="admin", password="1234"))
             db.session.commit()
 # [수정] Render 배포 환경을 위한 통합 초기화 및 실행 로직
-def start_app():
+def finalize_setup():
     with app.app_context():
         try:
-            # 1. DB 테이블 생성 (category, product 등 모든 테이블)
+            # 1) 테이블 생성
             db.create_all()
-            print("✅ [Render] 모든 데이터베이스 테이블 생성 완료")
-
-            # 2. SQLite 호환성 패치 (기존 DB에 컬럼이 없을 경우 대비)
+            
+            # 2) 필수 컬럼 패치
             from sqlalchemy import text
             alter_queries = [
                 'ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0',
@@ -4593,15 +4602,33 @@ def start_app():
                 except Exception:
                     db.session.rollback()
 
-            # 3. 10개 카테고리 & 100개 상품 자동 생성 함수 실행
-            # 이전에 작성한 init_db() 함수가 정의되어 있어야 합니다.
-            init_db() 
-            print("✅ [Render] 테스트 데이터(100개) 생성 프로세스 완료")
+            # 3) 어드민 계정 생성 (확실하게 1234로 초기화)
+            admin_email = "admin@uncle.com"
+            admin = User.query.filter_by(email=admin_email).first()
+            if not admin:
+                admin = User(
+                    email=admin_email,
+                    password=generate_password_hash("1234"),
+                    name="운영자",
+                    is_admin=True
+                )
+                db.session.add(admin)
+                print(f"✅ 어드민 계정 새 생성: {admin_email}")
+            else:
+                admin.is_admin = True
+                admin.password = generate_password_hash("1234")
+                print(f"✅ 어드민 계정 비밀번호 초기화 완료: {admin_email}")
+            
+            db.session.commit()
 
+            # 4) 배송 관리자 및 테스트 데이터 100개 주입
+            init_db() 
+            print("✅ 모든 초기화 프로세스 완료!")
+            
         except Exception as e:
-            print(f"❌ DB 초기화 중 오류 발생: {e}")
+            print(f"❌ 초기화 오류: {e}")
 
 if __name__ == "__main__":
-    # 로컬 테스트 환경
+    finalize_setup()  # 서버 시작 전 실행
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
