@@ -34,6 +34,33 @@ db_path = os.path.join(BASE_DIR, 'direct_trade_mall.db')
 delivery_db_path = os.path.join(BASE_DIR, 'delivery.db')
 
 app = Flask(__name__)
+def force_init_db():
+    with app.app_context():
+        try:
+            # 1. 테이블 생성
+            db.create_all()
+            
+            # 2. 필수 컬럼 강제 패치
+            from sqlalchemy import text
+            db.session.execute(text('ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0'))
+            db.session.execute(text('ALTER TABLE "order" ADD COLUMN settled_at DATETIME'))
+            db.session.commit()
+        except Exception:
+            db.session.rollback() # 컬럼이 이미 있으면 에러나므로 롤백 후 통과
+
+        # 3. 데이터가 비어있을 때만 100개 상품 생성 함수 실행
+        from sqlalchemy import inspect
+        inspector = inspect(db.engine)
+        if inspector.has_table("category"):
+            if not Category.query.first():
+                print("🔄 [System] 테이블은 있으나 데이터가 비어있음. init_db() 실행...")
+                init_db()
+            else:
+                print("✅ [System] 이미 데이터가 존재합니다.")
+        else:
+            print("❌ [Error] 여전히 category 테이블을 생성하지 못했습니다.")
+         
+            force_init_db()
 # ... (기존 설정들: secret_key, config 등) ...
 
 # [중요] 초기화 함수를 함수 밖으로 꺼내서 Gunicorn이 읽을 수 있게 합니다.
