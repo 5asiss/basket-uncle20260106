@@ -122,6 +122,50 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = db_delivery 
 db.init_app(app)
 
+def run_initialization():
+    with app.app_context():
+        try:
+            # 1. 테이블 생성 (category 테이블이 여기서 만들어집니다)
+            db.create_all()
+            
+            # 2. SQLite 컬럼 패치
+            from sqlalchemy import text
+            alter_queries = [
+                'ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0',
+                'ALTER TABLE "order" ADD COLUMN settled_at DATETIME'
+            ]
+            for query in alter_queries:
+                try:
+                    db.session.execute(text(query))
+                    db.session.commit()
+                except Exception:
+                    db.session.rollback()
+
+            # 3. 어드민 계정 확인 및 생성
+            admin_email = "admin@uncle.com"
+            admin = User.query.filter_by(email=admin_email).first()
+            if not admin:
+                new_admin = User(
+                    email=admin_email,
+                    password=generate_password_hash("1234"),
+                    name="운영자",
+                    is_admin=True
+                )
+                db.session.add(new_admin)
+                db.session.commit()
+                print(f"✅ 어드민 계정 생성 완료: {admin_email}")
+
+            # 4. 테스트 데이터 100개 주입 (init_db 함수 호출)
+            # init_db 함수 정의가 이 코드보다 위쪽에 있어야 합니다.
+            init_db() 
+            print("✅ 데이터베이스 초기화 및 상품 데이터 주입 완료")
+            
+        except Exception as e:
+            print(f"❌ 초기화 중 에러 발생: {e}")
+
+# [핵심] Gunicorn 워커가 이 파일을 읽을 때 즉시 초기화를 실행하도록 합니다.
+run_initialization()
+
 # [핵심] 여기서 함수를 호출해야 로컬 python 실행과 Render(G
 
 # 3. 배송 관리 시스템 Blueprint 등록 (주소 접두어 /logi 적용됨)
@@ -4583,52 +4627,42 @@ if __name__ == "__main__":
             db.session.add(AdminUser(username="admin", password="1234"))
             db.session.commit()
 # [수정] Render 배포 환경을 위한 통합 초기화 및 실행 로직
-def finalize_setup():
+# 1. 통합 초기화 함수 정의 (모델 클래스 정의가 끝난 뒤에 위치해야 함)
+def run_force_initialization():
     with app.app_context():
         try:
-            # 1) 테이블 생성
+            # DB 테이블 생성
             db.create_all()
             
-            # 2) 필수 컬럼 패치
+            # SQLite 필수 컬럼 패치 (이미 있으면 통과)
             from sqlalchemy import text
-            alter_queries = [
-                'ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0',
-                'ALTER TABLE "order" ADD COLUMN settled_at DATETIME'
-            ]
-            for query in alter_queries:
-                try:
-                    db.session.execute(text(query))
-                    db.session.commit()
-                except Exception:
-                    db.session.rollback()
+            alter_queries = ['ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0', 'ALTER TABLE "order" ADD COLUMN settled_at DATETIME']
+            for q in alter_queries:
+                try: db.session.execute(text(q)); db.session.commit()
+                except: db.session.rollback()
 
-            # 3) 어드민 계정 생성 (확실하게 1234로 초기화)
+            # 어드민 계정 강제 생성/초기화 (로그인 안되는 문제 해결)
             admin_email = "admin@uncle.com"
             admin = User.query.filter_by(email=admin_email).first()
             if not admin:
-                admin = User(
-                    email=admin_email,
-                    password=generate_password_hash("1234"),
-                    name="운영자",
-                    is_admin=True
-                )
+                admin = User(email=admin_email, password=generate_password_hash("1234"), name="운영자", is_admin=True)
                 db.session.add(admin)
-                print(f"✅ 어드민 계정 새 생성: {admin_email}")
+                print(f"✅ [Admin] 새 계정 생성: {admin_email}")
             else:
                 admin.is_admin = True
-                admin.password = generate_password_hash("1234")
-                print(f"✅ 어드민 계정 비밀번호 초기화 완료: {admin_email}")
+                admin.password = generate_password_hash("1234") # 비번 1234로 강제 리셋
+                print(f"✅ [Admin] 기존 계정 비번 초기화: {admin_email}")
             
             db.session.commit()
-
-            # 4) 배송 관리자 및 테스트 데이터 100개 주입
-            init_db() 
-            print("✅ 모든 초기화 프로세스 완료!")
+            init_db() # 100개 테스트 상품 생성
             
         except Exception as e:
-            print(f"❌ 초기화 오류: {e}")
+            print(f"❌ 초기화 에러: {e}")
 
+# 2. [핵심] 앱 실행 직전에 호출 (Gunicorn이 읽을 수 있게 if문 밖으로 꺼냄)
+run_force_initialization()
+
+# 3. 서버 실행부 (단순하게 유지)
 if __name__ == "__main__":
-    finalize_setup()  # 서버 시작 전 실행
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
