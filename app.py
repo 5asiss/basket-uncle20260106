@@ -4507,20 +4507,29 @@ if __name__ == "__main__":
 # DB에 'is_settled'와 'settled_at' 칸을 만드는 강제 명령어 (한 번만 실행)
 def finalize_setup():
     with app.app_context():
+        # 1. 모든 테이블 생성 (category 테이블 포함)
         db.create_all()
-        # SQLite 특성상 이미 테이블이 있으면 컬럼 추가가 안될 수 있어 수동 패치
-        from sqlalchemy import text
-        try:
-            db.session.execute(text('ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0'))
-            db.session.execute(text('ALTER TABLE "order" ADD COLUMN settled_at DATETIME'))
-            db.session.commit()
-        except:
-            db.session.rollback()
+        print("✅ 데이터베이스 테이블 생성 완료")
         
-        init_db() # 100개 상품 생성 함수 호출
+        # 2. SQLite 호환성을 위한 컬럼 추가 패치 (이미 있으면 무시됨)
+        from sqlalchemy import text
+        alter_queries = [
+            'ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0',
+            'ALTER TABLE "order" ADD COLUMN settled_at DATETIME'
+        ]
+        for query in alter_queries:
+            try:
+                db.session.execute(text(query))
+                db.session.commit()
+            except Exception:
+                db.session.rollback()
+        
+        # 3. 10개 카테고리 & 100개 상품 자동 생성 함수 실행
+        # 이전에 만든 init_db() 함수가 100개를 생성하는 로직인지 확인하세요.
+        init_db() 
 
 if __name__ == "__main__":
     finalize_setup()
-    # Render 배포 호환 포트 설정
+    # Render 환경에서 포트 자동 할당
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
