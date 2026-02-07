@@ -29,17 +29,19 @@ load_dotenv()
 # --- 수정 후 (이 부분으로 교체하세요) ---
 from delivery_system import logi_bp, db_delivery
 
-app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "default_fallback_key")
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(BASE_DIR, 'direct_trade_mall.db')
+delivery_db_path = os.path.join(BASE_DIR, 'delivery.db')
 
-# 1. 모든 DB 경로 설정
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", "sqlite:///direct_trade_mall.db")
+app = Flask(__name__)
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "low_price_mall_key_2026")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", f"sqlite:///{db_path}")
 app.config['SQLALCHEMY_BINDS'] = {
-    'delivery': os.getenv("DELIVERY_DATABASE_URL", "sqlite:///delivery.db")
+    'delivery': os.getenv("DELIVERY_DATABASE_URL", f"sqlite:///{delivery_db_path}")
 }
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+MALL_NAME = "최저가쇼핑몰"
 # 2. DB 연결 (공백 제거 버전)
 db = db_delivery
 db.init_app(app)
@@ -242,7 +244,7 @@ HEADER_HTML = """
     <meta name="description" content="바구니 삼촌은 농산물·식자재를 중간 유통 없이 직접 연결하고 최소 배송비만 받는 신개념 물류·구매대행 서비스입니다.">
 <title>바구니 삼촌 |  basam</title>
 
-    <title>바구니삼촌 - 농산물·식자재 배송 신개념 6PL 생활서비스 basam </title>
+    <title>최저가 쇼핑몰 - 농산물·식자재 배송 신개념 6PL 생활서비스 basam </title>
     <script src="https://js.tosspayments.com/v1/payment"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -367,7 +369,7 @@ HEADER_HTML = """
             </a>
             {% endfor %}
             <div class="h-px bg-gray-100 w-full my-4"></div>
-            <a href="/about" class="block font-bold text-blue-500 hover:underline">바구니삼촌이란?</a>
+            <a href="/about" class="block font-bold text-blue-500 hover:underline">최저가 쇼핑몰이란?</a>
         </nav>
     </div> <nav class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-3 md:px-6">
@@ -377,8 +379,8 @@ HEADER_HTML = """
                         <i class="fas fa-bars"></i>
                     </button>
                     <a href="/" class="flex items-center gap-1.5">
-                        <img src="/static/logo/side1.jpg" alt="바구니삼촌" class="h-7 md:h-10 w-auto rounded-lg" onerror="this.style.display='none'">
-                        <span class="italic tracking-tighter uppercase font-black text-green-600 text-base md:text-xl">바구니삼촌</span>
+                        <img src="/static/logo/side1.jpg" alt="최저가 쇼핑몰" class="h-7 md:h-10 w-auto rounded-lg" onerror="this.style.display='none'">
+                        <span class="italic tracking-tighter uppercase font-black text-green-600 text-base md:text-xl">최저가 쇼핑몰</span>
                     </a>
                 </div>
 
@@ -484,7 +486,7 @@ FOOTER_HTML = """
             
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/5 pb-10 mb-10 gap-8">
                 <div class="text-left">
-                    <p class="text-green-500 font-black text-2xl italic tracking-tighter mb-2 uppercase">바구니삼촌</p>
+                    <p class="text-green-500 font-black text-2xl italic tracking-tighter mb-2 uppercase">최저가 쇼핑몰</p>
                     <p class="text-xs text-orange-500 font-bold italic">인천 연수구 송도동 전용 구매대행 및 배송 서비스</p>
                 </div>
                 
@@ -509,7 +511,7 @@ FOOTER_HTML = """
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
                 <div class="text-[10px] md:text-[11px] space-y-1.5 opacity-40 leading-relaxed font-medium text-left">
-                    <p>상호: 바구니삼촌 | 대표: 금창권 | 개인정보관리책임자: 금창권</p>
+                    <p>상호: 최저가 쇼핑몰 | 대표: 금창권 | 개인정보관리책임자: 금창권</p>
                     <p>주소: 인천광역시 연수구 하모니로158, D동 317호 (송도동, 송도 타임스페이스)</p>
                     <p>사업자등록번호: 472-93-02262 | 통신판매업신고: 제 2025-인천연수-3388호</p>
                     <p>이메일: basamsongdo@gmail.com</p>
@@ -546,10 +548,10 @@ FOOTER_HTML = """
 
         const UNCLE_TERMS = {
     'terms': {
-        'title': '바구니삼촌 서비스 이용약관',
+        'title': '최저가 쇼핑몰 서비스 이용약관',
         'content': `
             <b>제1조 (목적)</b><br>
-            본 약관은 바구니삼촌(이하 “회사”)이 제공하는 구매대행 및 물류·배송 관리 서비스의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.<br><br>
+            본 약관은 최저가 쇼핑몰(이하 “회사”)이 제공하는 구매대행 및 물류·배송 관리 서비스의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.<br><br>
             <b>제2조 (서비스의 성격 및 정의)</b><br>
             ① 회사는 이용자의 요청에 따라 상품을 대신 구매하고, 결제, 배송 관리, 고객 응대, 환불 처리 등 거래 전반을 회사가 직접 관리·운영하는 구매대행 서비스를 제공합니다.<br>
             ② 본 서비스는 <b>통신판매중개업(오픈마켓)이 아니며</b>, 회사가 거래 및 운영의 주체로서 서비스를 제공합니다.<br><br>
@@ -562,7 +564,7 @@ FOOTER_HTML = """
     },
             'privacy': {
                 'title': '개인정보처리방침',
-                'content': '<b>개인정보의 수집 및 이용</b><br>바구니삼촌은 주문 처리, 상품 배송, 고객 상담을 위해 필수적인 개인정보를 수집하며, 관계 법령에 따라 안전하게 보호합니다.'
+                'content': '<b>개인정보의 수집 및 이용</b><br>최저가 쇼핑몰은 주문 처리, 상품 배송, 고객 상담을 위해 필수적인 개인정보를 수집하며, 관계 법령에 따라 안전하게 보호합니다.'
             },
             'agency': {
                 'title': '서비스 이용 안내',
@@ -674,7 +676,7 @@ function openUncleModal(type) {
       title: '이용약관',
       content: `
       <p><strong>제1조 (목적)</strong><br>
-      본 약관은 바구니삼촌(이하 "회사")이 제공하는 구매대행 및 배송 중개 서비스의 이용과 관련하여
+      본 약관은 최저가 쇼핑몰(이하 "회사")이 제공하는 구매대행 및 배송 중개 서비스의 이용과 관련하여
       회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</p>
 
       <p><strong>제2조 (서비스의 정의)</strong><br>
@@ -726,7 +728,7 @@ function openUncleModal(type) {
       title: '이용안내',
       content: `
       <p><strong>서비스 안내</strong><br>
-      바구니삼촌은 상품을 직접 보유하거나 판매하지 않는
+      최저가 쇼핑몰은 상품을 직접 보유하거나 판매하지 않는
       구매대행 및 배송 중개 플랫폼입니다.</p>
 
       <p><strong>주문 절차</strong><br>
@@ -927,7 +929,7 @@ def admin_order_print():
             {% for o in orders %}
             <div class="invoice-card">
                 <div class="flex justify-between items-center border-b-4 border-black pb-2 mb-3">
-                    <h1 class="text-2xl font-black tracking-tighter text-green-700 italic">바구니삼촌</h1>
+                    <h1 class="text-2xl font-black tracking-tighter text-green-700 italic">최저가 쇼핑몰</h1>
                     <p class="text-[11px] font-black bg-black text-white px-3 py-1 rounded">송도 전용 배송</p>
                 </div>
 
@@ -1098,7 +1100,7 @@ def index():
         <div class="w-12 h-1 bg-white/20 mx-auto mb-8"></div>
 
         <p class="hero-desc text-gray-400 text-sm md:text-2xl font-bold max-w-3xl mx-auto mb-12 leading-relaxed md:leading-normal break-keep px-4">
-            바구니삼촌은 재고를 쌓아두는 판매처가 아닌, <br class="hidden md:block">
+            최저가 쇼핑몰은 재고를 쌓아두는 판매처가 아닌, <br class="hidden md:block">
             이용자의 요청에 따라 <span class="text-white underline decoration-green-500 decoration-2 md:decoration-4 underline-offset-8">구매와 배송을 책임 대행</span>하는 물류 인프라입니다.
         </p>
 
@@ -1152,14 +1154,12 @@ def index():
                 
                 {% if p.description %}
                 <div class="absolute top-3 left-0 z-20">
-                    <span class="px-2.5 py-1 text-[8px] md:text-[10px] font-black text-white shadow-md rounded-r-full 
-                        {% if '당일' in p.description %} bg-red-600 
-                        {% elif '+1' in p.description %} bg-blue-600 
-                        {% elif '+2' in p.description %} bg-emerald-600 
-                        {% else %} bg-gray-600 {% endif %}">
-                        <i class="fas fa-truck-fast mr-1"></i> {{ p.description }}
-                    </span>
-                </div>
+        <span class="px-3 py-1 text-[10px] font-black text-white shadow-md rounded-r-full 
+            {% if '당일' in p.description %} bg-red-500 
+            {% else %} bg-blue-500 {% endif %}">
+            {{ p.description }}
+        </span>
+    </div>
                 {% endif %}
 
                 <a href="/product/{{p.id}}" class="relative aspect-square block bg-white overflow-hidden text-left">
@@ -1256,7 +1256,7 @@ def index():
 
             <a href="/about"
                class="text-white/60 hover:text-white font-bold border-b border-white/20 pb-1 transition text-xs md:text-base">
-                바구니삼촌이란? <i class="fas fa-arrow-right ml-2"></i>
+                최저가 쇼핑몰이란? <i class="fas fa-arrow-right ml-2"></i>
             </a>
         </div>
 
@@ -1405,7 +1405,7 @@ def index():
 
 @app.route('/about')
 def about_page():
-    """제공된 HTML 형식을 반영한 바구니삼촌 브랜드 소개 페이지"""
+    """제공된 HTML 형식을 반영한 최저가 쇼핑몰 브랜드 소개 페이지"""
     content = """
     <style>
         /* 소개 페이지 전용 스타일 */
@@ -1934,7 +1934,7 @@ def product_detail(pid):
                     <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100 col-span-2 shadow-sm">
                         <p class="text-[9px] text-blue-400 uppercase mb-1 font-black">Direct Delivery (송도전용)</p>
                         <p class="text-sm md:text-base font-black text-blue-700">
-                            <i class="fas fa-truck-fast mr-2"></i>바구니삼촌 {{ p.description }} 내 직접 배송
+                            <i class="fas fa-truck-fast mr-2"></i>최저가 쇼핑몰 {{ p.description }} 내 직접 배송
                         </p>
                     </div>
                 </div>
@@ -1943,7 +1943,7 @@ def product_detail(pid):
 <div class="hidden md:block">
     <div class="bg-gray-50 p-4 rounded-2xl mb-6 border border-gray-100">
         <p class="text-[11px] text-gray-500 leading-relaxed font-bold">
-            <i class="fas fa-info-circle mr-1"></i> 바구니삼촌은 구매대행형 서비스로서 본 상품의 실제 판매처와 고객을 연결하고 결제 및 배송 전반을 책임 관리합니다.
+            <i class="fas fa-info-circle mr-1"></i> 최저가 쇼핑몰은 구매대행형 서비스로서 본 상품의 실제 판매처와 고객을 연결하고 결제 및 배송 전반을 책임 관리합니다.
         </p>
     </div>
     {% if p.stock > 0 and not is_expired %}
@@ -1963,23 +1963,26 @@ def product_detail(pid):
             </div>
 
             <div id="details" class="space-y-12 px-4 md:px-0">
-                <div class="bg-green-50/50 p-10 md:p-20 rounded-[2.5rem] md:rounded-[4.5rem] text-center border-none shadow-inner">
-                    <i class="fas fa-quote-left text-green-200 text-4xl mb-6"></i>
-                    <p class="text-xl md:text-3xl font-black text-gray-800 leading-relaxed break-keep">
-                        {{ p.origin or '바구니삼촌이 꼼꼼하게 검수하여\\n송도 이웃에게 보내드리는 믿을 수 있는 상품입니다.' }}
-                    </p>
-                    <i class="fas fa-quote-right text-green-200 text-4xl mt-6"></i>
-                </div>
-                <div class="flex flex-col gap-0 max-w-4xl mx-auto">
-                    {% if detail_images %}
-                        {% for img in detail_images %}
-                        <img src="{{ img.strip() }}" class="w-full shadow-sm" loading="lazy" onerror="this.style.display='none'">
-                        {% endfor %}
-                    {% else %}
-                        <img src="{{ p.image_url }}" class="w-full rounded-3xl opacity-60 grayscale p-10">
-                    {% endif %}
-                </div>
-            </div>
+    <div class="bg-gray-50 p-10 md:p-16 rounded-[2.5rem] text-left border border-gray-100 shadow-inner">
+        <p class="text-orange-600 font-black text-sm mb-4">
+            <i class="fas fa-truck-fast mr-2"></i>배송 안내: {{ p.description }}
+        </p>
+        <h3 class="text-2xl font-black text-gray-800 mb-6">상품 상세 설명</h3>
+        <p class="text-lg text-gray-600 leading-relaxed font-bold">
+            본 상품은 **{{ p.origin }}** 상품으로, {{ p.farmer }}에서 정성껏 준비했습니다.<br><br>
+            최저가쇼핑몰이 직접 검수한 믿을 수 있는 품질! <br>
+            복잡한 유통 과정을 생략하여 거품 없는 가격으로 고객님께 직접 배송해 드립니다.
+        </p>
+    </div>
+
+    <div class="flex flex-col gap-0 max-w-4xl mx-auto">
+        {% if detail_images %}
+            {% for img in detail_images %}
+            <img src="{{ img.strip() }}" class="w-full shadow-sm rounded-2xl mb-4" loading="lazy">
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
         </div>
 
         <div id="reviews" class="mt-40 px-4 md:px-0">
@@ -2108,7 +2111,7 @@ def product_detail(pid):
                 <i class="fas fa-rocket text-xl text-blue-400"></i> 최신 상품 전체보기
             </a>
             <a href="/" class="bg-white border-2 border-green-600 text-green-600 py-8 rounded-[2.5rem] text-center text-base font-black shadow-sm hover:bg-green-50 transition flex items-center justify-center gap-4">
-                <i class="fas fa-home text-xl"></i> 바구니삼촌 홈으로
+                <i class="fas fa-home text-xl"></i> 최저가 쇼핑몰 홈으로
             </a>
         </div>
     </div>
@@ -2202,7 +2205,7 @@ def register():
         
         # 송도동 체크
         if "송도동" not in (addr or ""):
-            flash("바구니삼촌은 현재 송도동 지역 전용 서비스입니다. 배송지 주소를 확인해주세요."); return redirect('/register')
+            flash("최저가 쇼핑몰은 현재 송도동 지역 전용 서비스입니다. 배송지 주소를 확인해주세요."); return redirect('/register')
 
         if not request.form.get('consent_e_commerce'):
             flash("전자상거래 이용 약관 및 유의사항에 동의해야 합니다."); return redirect('/register')
@@ -2256,7 +2259,7 @@ def update_address():
     ent_pw = request.form.get('entrance_pw')
 
     if not addr or "송도동" not in addr:
-        flash("바구니삼촌은 송도 전용 서비스입니다. 주소에 '송도동'이 포함되어야 합니다. 😊")
+        flash("최저가 쇼핑몰은 송도 전용 서비스입니다. 주소에 '송도동'이 포함되어야 합니다. 😊")
         return redirect(url_for('mypage'))
 
     try:
@@ -2423,7 +2426,7 @@ def mypage():
             
             <div class="p-8 space-y-8 text-left bg-white">
                 <div class="text-center border-b-2 border-gray-800 pb-6">
-                    <h3 class="text-2xl font-black text-gray-900 mb-2 italic">바구니삼촌</h3>
+                    <h3 class="text-2xl font-black text-gray-900 mb-2 italic">최저가 쇼핑몰</h3>
                     <div class="text-[10px] text-gray-500 font-bold space-y-1">
                         <p>사업자번호: 472-93-02262</p>
                         <p>대표: 금창권 | 고객센터: 1666-8320</p>
@@ -2785,7 +2788,7 @@ def order_confirm():
                 </p>
             </div>
 
-            {f'<div class="p-6 bg-red-100 rounded-2xl text-red-700 text-xs md:text-sm font-bold leading-relaxed">⚠️ 바구니삼촌은 인천 송도동 지역만 배송하는 서비스입니다. 주소를 수정해 주세요.</div>' if not is_songdo else ''}
+            {f'<div class="p-6 bg-red-100 rounded-2xl text-red-700 text-xs md:text-sm font-bold leading-relaxed">⚠️ 최저가 쇼핑몰은 인천 송도동 지역만 배송하는 서비스입니다. 주소를 수정해 주세요.</div>' if not is_songdo else ''}
 
             <div class="space-y-4 pt-4">
                 <div class="flex justify-between items-end font-black">
@@ -2803,7 +2806,7 @@ def order_confirm():
                 <label class="flex items-start gap-4 cursor-pointer group">
                     <input type="checkbox" id="consent_agency" class="mt-1 w-4 h-4 rounded-full border-gray-300 text-green-600 focus:ring-green-500" required>
                     <span class="group-hover:text-gray-800 transition leading-relaxed">
-                        [필수] 본인은 바구니삼촌이 상품 판매자가 아니며, 요청에 따라 구매 및 배송을 대행하는 서비스임을 확인하고 이에 동의합니다.
+                        [필수] 본인은 최저가 쇼핑몰이 상품 판매자가 아니며, 요청에 따라 구매 및 배송을 대행하는 서비스임을 확인하고 이에 동의합니다.
                     </span>
                 </label>
                 <label class="flex items-start gap-4 pt-4 border-t border-gray-200 cursor-pointer group">
@@ -2862,7 +2865,7 @@ def order_payment():
             안전 결제 시스템 연결
         </h2>
         <p class="text-gray-400 font-bold text-sm md:text-base mb-12 leading-relaxed">
-            바구니삼촌은 토스페이먼츠의 보안망을 통해<br>고객님의 결제 정보를 안전하게 보호합니다.
+            최저가 쇼핑몰은 토스페이먼츠의 보안망을 통해<br>고객님의 결제 정보를 안전하게 보호합니다.
         </p>
 
         <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-xl mb-12 text-left space-y-4">
@@ -4023,7 +4026,7 @@ def admin_product_bulk_upload():
                 price=int(row['가격']), 
                 spec=str(row['규격']), 
                 origin="국산", 
-                farmer="바구니삼촌", 
+                farmer="최저가 쇼핑몰", 
                 stock=50, # 기본 재고 50개 설정
                 image_url=img_url, 
                 detail_image_url=img_url, # 메인과 상세 동일하게 복사
@@ -4068,7 +4071,7 @@ def admin_product_add():
         main_img = save_uploaded_file(request.files.get('main_image'))
         detail_files = request.files.getlist('detail_images')
         detail_img_url_str = ",".join(filter(None, [save_uploaded_file(f) for f in detail_files if f.filename != '']))
-        new_p = Product(name=request.form['name'], description=request.form['description'], category=cat_name, price=int(request.form['price']), spec=request.form['spec'], origin=request.form['origin'], farmer="바구니삼촌", stock=int(request.form['stock']), image_url=main_img or "", detail_image_url=detail_img_url_str, deadline=datetime.strptime(request.form['deadline'], '%Y-%m-%dT%H:%M') if request.form.get('deadline') else None, badge=request.form['badge'])
+        new_p = Product(name=request.form['name'], description=request.form['description'], category=cat_name, price=int(request.form['price']), spec=request.form['spec'], origin=request.form['origin'], farmer="최저가 쇼핑몰", stock=int(request.form['stock']), image_url=main_img or "", detail_image_url=detail_img_url_str, deadline=datetime.strptime(request.form['deadline'], '%Y-%m-%dT%H:%M') if request.form.get('deadline') else None, badge=request.form['badge'])
         db.session.add(new_p); db.session.commit(); return redirect('/admin')
     return render_template_string(HEADER_HTML + """<div class="max-w-xl mx-auto py-20 px-6 font-black text-left"><h2 class="text-3xl font-black mb-12 border-l-8 border-green-600 pl-6 uppercase italic text-left">Add Product</h2><form method="POST" enctype="multipart/form-data" class="bg-white p-10 rounded-[3rem] shadow-2xl space-y-7 text-left"><select name="category" class="w-full p-5 bg-gray-50 rounded-2xl font-black outline-none focus:ring-4 focus:ring-green-50 text-left">{% for c in nav_categories %}<option value="{{c.name}}">{{c.name}}</option>{% endfor %}</select>
    <input name="name" placeholder="상품 명칭 (예: 꿀부사 사과)" class="w-full p-5 bg-gray-50 rounded-2xl font-black text-left text-sm" value="{{ p.name if p else '' }}" required>
@@ -4363,7 +4366,7 @@ def admin_orders_excel():
         df.to_excel(w, index=False)
     
     out.seek(0)
-    filename = f"바구니삼촌_주문정산_{datetime.now().strftime('%m%d_%H%M')}.xlsx"
+    filename = f"최저가 쇼핑몰_주문정산_{datetime.now().strftime('%m%d_%H%M')}.xlsx"
     return send_file(out, download_name=filename, as_attachment=True)
     # 데이터프레임 생성 및 열 순서 정리
     df = pd.DataFrame(data)
@@ -4393,7 +4396,7 @@ def admin_orders_excel():
     out.seek(0)
     
     # 파일명 한글 깨짐 방지 인코딩
-    filename = f"바구니삼촌_주문데이터_{datetime.now().strftime('%m%d_%H%M')}.xlsx"
+    filename = f"최저가 쇼핑몰_주문데이터_{datetime.now().strftime('%m%d_%H%M')}.xlsx"
     encoded_filename = quote(filename)
     
     response = send_file(
@@ -4411,51 +4414,74 @@ def admin_orders_excel():
 # --------------------------------------------------------------------------------
 
 def init_db():
-    """데이터베이스 및 기초 데이터 생성"""
     with app.app_context():
-        # 모든 테이블(Settlement 포함) 생성
         db.create_all()
-        # 누락된 컬럼 수동 추가 (ALTER TABLE 로직)
-        cols = [
-            ("product", "description", "VARCHAR(200)"), 
-            ("product", "detail_image_url", "TEXT"), 
-            ("user", "request_memo", "VARCHAR(500)"), 
-            ("order", "delivery_fee", "INTEGER DEFAULT 0"), 
-            ("product", "badge", "VARCHAR(50)"), 
-            ("category", "seller_name", "VARCHAR(100)"), 
-            ("category", "seller_inquiry_link", "VARCHAR(500)"), 
-            ("category", "order", "INTEGER DEFAULT 0"), 
-            ("category", "description", "VARCHAR(200)"), 
-            ("category", "biz_name", "VARCHAR(100)"), 
-            ("category", "biz_representative", "VARCHAR(50)"), 
-            ("category", "biz_reg_number", "VARCHAR(50)"), 
-            ("category", "biz_address", "VARCHAR(200)"), 
-            ("category", "biz_contact", "VARCHAR(50)"), 
-            ("order", "status", "VARCHAR(20) DEFAULT '결제완료'"), 
-            ("review", "user_name", "VARCHAR(50)"), 
-            ("review", "product_name", "VARCHAR(100)"),
-            ("review", "order_id", "INTEGER") 
-        ]
-        for t, c, ct in cols:
-            try: 
-                db.session.execute(text(f"ALTER TABLE \"{t}\" ADD COLUMN \"{c}\" {ct}"))
-                db.session.commit()
-            except: 
-                db.session.rollback()
         
-        # 관리자 계정 생성 로직 동일 유지
+        # 1. 관리자 계정 생성
         if not User.query.filter_by(email="admin@uncle.com").first():
-            db.session.add(User(email="admin@uncle.com", password=generate_password_hash("1234"), name="바구니삼촌", is_admin=True))
-        db.session.commit()
-            
-        # 기초 데이터 (관리자 및 샘플 카테고리)
-        if not User.query.filter_by(email="admin@uncle.com").first():
-            db.session.add(User(email="admin@uncle.com", password=generate_password_hash("1234"), name="바구니삼촌", is_admin=True))
-        if not Category.query.first():
-            db.session.add(Category(name="신선 농산물", tax_type="면세", order=0, description="물류 전문가가 엄선한 산지직송 제철 농산물입니다.")); 
-            db.session.add(Category(name="프리미엄 공동구매", tax_type="과세", order=1, description="유통 단계를 파격적으로 줄인 송도 전용 공구 상품입니다."));
-        db.session.commit()
+            db.session.add(User(
+                email="admin@uncle.com", 
+                password=generate_password_hash("1234"), 
+                name="운영자", 
+                is_admin=True
+            ))
 
+        # 2. 임의의 카테고리 10개 생성
+        test_categories = [
+            "신선채소", "제철과일", "정육계란", "수산물", "곡류/견과",
+            "간편요리", "유제품", "음료/주류", "생활용품", "베이커리"
+        ]
+        
+        if not Category.query.first():
+            for i, cat_name in enumerate(test_categories):
+                new_cat = Category(
+                    name=cat_name,
+                    order=i,
+                    description=f"{cat_name} 카테고리의 최저가 상품 모음입니다.",
+                    biz_name="최저가쇼핑몰 물류센터",
+                    biz_contact="1666-8320",
+                    tax_type="면세" if i < 5 else "과세"
+                )
+                db.session.add(new_cat)
+            db.session.commit()
+
+        # 3. 카테고리당 상품 10개씩 (총 100개) 생성
+        if not Product.query.first():
+            categories = Category.query.all()
+            # 배송 옵션 리스트
+            delivery_options = ["당일배송", "+1일 배송", "+2일 배송"]
+            # 상세 설명 문구 샘플
+            desc_samples = [
+                "생산지에서 갓 수확하여 신선함이 그대로 살아있습니다.",
+                "최저가 보장! 유통 마진을 뺀 합리적인 가격으로 만나보세요.",
+                "깐깐한 검수를 거친 최상급 품질의 상품만 엄선했습니다.",
+                "보관이 용이한 특수 포장으로 안전하게 배송해 드립니다."
+            ]
+
+            for cat in categories:
+                for j in range(1, 11):
+                    random_img_id = random.randint(1, 500)
+                    delivery_info = random.choice(delivery_options)
+                    
+                    new_p = Product(
+                        category=cat.name,
+                        name=f"{cat.name} 특선 상품 {j:02d}",
+                        price=random.randrange(5000, 80000, 500),
+                        spec=f"{random.randint(1, 5)}kg / 1박스",
+                        description=delivery_info,  # 배송 옵션으로 활용
+                        origin="국내산(산지직송)",    # 원산지
+                        farmer="최저가쇼핑몰 엄선농가",
+                        stock=random.randint(20, 200),
+                        image_url=f"https://picsum.photos/id/{random_img_id}/400/400",
+                        detail_image_url=f"https://picsum.photos/id/{random_img_id}/600/800",
+                        badge="BEST" if j <= 2 else "NEW",
+                        # 상세페이지 내 텍스트 설명 (기존 모델의 'origin' 필드를 활용하거나 별도 필드 필요)
+                        # 여기서는 기존 모델 구조를 깨지 않기 위해 badge나 description을 조합해 사용합니다.
+                        is_active=True
+                    )
+                    db.session.add(new_p)
+            db.session.commit()
+            print("✅ 상세 옵션이 포함된 상품 100개 생성 완료!")
 # [수정 위치: app.py 파일 가장 마지막 부분]
 
 import subprocess
@@ -4479,15 +4505,22 @@ if __name__ == "__main__":
             db.session.add(AdminUser(username="admin", password="1234"))
             db.session.commit()
 # DB에 'is_settled'와 'settled_at' 칸을 만드는 강제 명령어 (한 번만 실행)
-with app.app_context():
-    from sqlalchemy import text
-    try:
-        db.session.execute(text('ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0'))
-        db.session.execute(text('ALTER TABLE "order" ADD COLUMN settled_at DATETIME'))
-        db.session.commit()
-    except: pass # 이미 있으면 무시
-    init_db() # 기존 쇼핑몰 초기화 함수 호출
-    
-    # 로컬 테스트 및 Render 배포 호환 포트 설정
+def finalize_setup():
+    with app.app_context():
+        db.create_all()
+        # SQLite 특성상 이미 테이블이 있으면 컬럼 추가가 안될 수 있어 수동 패치
+        from sqlalchemy import text
+        try:
+            db.session.execute(text('ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0'))
+            db.session.execute(text('ALTER TABLE "order" ADD COLUMN settled_at DATETIME'))
+            db.session.commit()
+        except:
+            db.session.rollback()
+        
+        init_db() # 100개 상품 생성 함수 호출
+
+if __name__ == "__main__":
+    finalize_setup()
+    # Render 배포 호환 포트 설정
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
