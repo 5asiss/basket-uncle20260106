@@ -4653,7 +4653,7 @@ def run_force_initialization():
                 admin.password = generate_password_hash("1234") # 비번 1234로 강제 리셋
                 print(f"✅ [Admin] 기존 계정 비번 초기화: {admin_email}")
             
-            db.session.commit()
+            db.session.commit()                                                                                                                                                                         
             init_db() # 100개 테스트 상품 생성
             
         except Exception as e:
