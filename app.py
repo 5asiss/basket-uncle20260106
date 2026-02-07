@@ -4504,32 +4504,39 @@ if __name__ == "__main__":
         if not AdminUser.query.filter_by(username='admin').first():
             db.session.add(AdminUser(username="admin", password="1234"))
             db.session.commit()
-# DB에 'is_settled'와 'settled_at' 칸을 만드는 강제 명령어 (한 번만 실행)
-def finalize_setup():
+# [수정] Render 배포 환경을 위한 통합 초기화 및 실행 로직
+def start_app():
     with app.app_context():
-        # 1. 모든 테이블 생성 (category 테이블 포함)
-        db.create_all()
-        print("✅ 데이터베이스 테이블 생성 완료")
-        
-        # 2. SQLite 호환성을 위한 컬럼 추가 패치 (이미 있으면 무시됨)
-        from sqlalchemy import text
-        alter_queries = [
-            'ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0',
-            'ALTER TABLE "order" ADD COLUMN settled_at DATETIME'
-        ]
-        for query in alter_queries:
-            try:
-                db.session.execute(text(query))
-                db.session.commit()
-            except Exception:
-                db.session.rollback()
-        
-        # 3. 10개 카테고리 & 100개 상품 자동 생성 함수 실행
-        # 이전에 만든 init_db() 함수가 100개를 생성하는 로직인지 확인하세요.
-        init_db() 
+        try:
+            # 1. DB 테이블 생성 (category, product 등 모든 테이블)
+            db.create_all()
+            print("✅ [Render] 모든 데이터베이스 테이블 생성 완료")
+
+            # 2. SQLite 호환성 패치 (기존 DB에 컬럼이 없을 경우 대비)
+            from sqlalchemy import text
+            alter_queries = [
+                'ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0',
+                'ALTER TABLE "order" ADD COLUMN settled_at DATETIME'
+            ]
+            for query in alter_queries:
+                try:
+                    db.session.execute(text(query))
+                    db.session.commit()
+                except Exception:
+                    db.session.rollback()
+
+            # 3. 10개 카테고리 & 100개 상품 자동 생성 함수 실행
+            # 이전에 작성한 init_db() 함수가 정의되어 있어야 합니다.
+            init_db() 
+            print("✅ [Render] 테스트 데이터(100개) 생성 프로세스 완료")
+
+        except Exception as e:
+            print(f"❌ DB 초기화 중 오류 발생: {e}")
 
 if __name__ == "__main__":
-    finalize_setup()
-    # Render 환경에서 포트 자동 할당
+    # 서버 시작 전 초기화 함수 강제 실행
+    start_app()
+    
+    # Render 환경 변수 PORT 확인 (기본값 5000)
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=False) # 배포 시에는 debug=False 권장
