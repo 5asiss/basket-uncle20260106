@@ -5,3 +5,6 @@ pandas
 openpyxl
 werkzeug
 gunicorn
+requests
+Pillow
+python-dotenv
