@@ -64,13 +64,14 @@ def force_init_db():
 # ... (기존 설정들: secret_key, config 등) ...
 
 # [중요] 초기화 함수를 함수 밖으로 꺼내서 Gunicorn이 읽을 수 있게 합니다.
-def initialize_database():
+def initialize_everything():
     with app.app_context():
         try:
-            # 1. 테이블 생성
+            # 1. DB 연결 및 테이블 생성
+            # db.init_app(app) 이 호출된 이후여야 합니다.
             db.create_all()
             
-            # 2. SQLite 컬럼 패치
+            # 2. SQLite 필수 컬럼 강제 패치 (ALTER TABLE)
             from sqlalchemy import text
             alter_queries = [
                 'ALTER TABLE "order" ADD COLUMN is_settled INTEGER DEFAULT 0',
@@ -83,27 +84,38 @@ def initialize_database():
                 except Exception:
                     db.session.rollback()
 
-            # 3. 테스트 데이터 생성 (최저가 쇼핑몰 100개 상품)
+            # 3. 배송 시스템 관리자 생성
+            try:
+                from delivery_system import AdminUser
+                if not AdminUser.query.filter_by(username='admin').first():
+                    db.session.add(AdminUser(username="admin", password="1234"))
+                    db.session.commit()
+            except Exception as e:
+                print(f"배송 관리자 생성 건너뜀: {e}")
+
+            # 4. 상품 데이터 100개 생성 (기존 init_db 호출)
             init_db() 
-            print("✅ Database & Test Data initialized successfully.")
+            print("✅ [Render] 데이터베이스 및 100개 상품 초기화 완료")
+            
         except Exception as e:
-            print(f"❌ Initialization Error: {e}")
+            print(f"❌ 초기화 중 오류 발생: {e}")
 
 # 앱이 로드될 때 즉시 실행
 initialize_database()
 
 # ... (이후 라우트 함수들: @app.route 등) ...
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "low_price_mall_key_2026")
-
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL", f"sqlite:///{db_path}")
 app.config['SQLALCHEMY_BINDS'] = {
     'delivery': os.getenv("DELIVERY_DATABASE_URL", f"sqlite:///{delivery_db_path}")
 }
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-MALL_NAME = "최저가쇼핑몰"
-# 2. DB 연결 (공백 제거 버전)
+
 db = db_delivery
 db.init_app(app)
+
+# [핵심] 여기서 초기화 함수를 호출해야 Gunicorn이 실행할 때 테이블을 만듭니다.
+initialize_everything()
 
 # 3. 배송 관리 시스템 Blueprint 등록 (주소 접두어 /logi 적용됨)
 app.register_blueprint(logi_bp)
@@ -4593,9 +4605,6 @@ def start_app():
             print(f"❌ DB 초기화 중 오류 발생: {e}")
 
 if __name__ == "__main__":
-    # 서버 시작 전 초기화 함수 강제 실행
-    start_app()
-    
-    # Render 환경 변수 PORT 확인 (기본값 5000)
+    # 로컬 테스트용 실행부
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=False) # 배포 시에는 debug=False 권장
+    app.run(host="0.0.0.0", port=port, debug=True)
