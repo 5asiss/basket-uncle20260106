@@ -452,6 +452,7 @@ HEADER_HTML = """
 </style>
 <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#059669">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="바구니삼촌">
@@ -2439,9 +2440,11 @@ def serve_manifest():
 def serve_sw():
     return send_from_directory('static', 'sw.js', mimetype='application/javascript')
 # 2440번째 줄 근처 (PWA 서빙 코드 있는 곳)에 추가
-@app.route('/static/logo/<path:filename>')
+# app.py 내 serve_logo 함수를 아래처럼 더 명확하게 수정
+@app.route('/static/logo/<filename>')
 def serve_logo(filename):
-    return send_from_directory('static/logo', filename)
+    # mimetypes를 자동으로 인식하게 하여 브라우저가 '이미지'임을 확실히 알게 합니다.
+    return send_from_directory(os.path.join(app.root_path, 'static', 'logo'), filename)
 @app.route('/mypage/update_address', methods=['POST'])
 @login_required
 def update_address():
