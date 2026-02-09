@@ -33,7 +33,7 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 db_path = os.path.join(BASE_DIR, 'direct_trade_mall.db')
 delivery_db_path = os.path.join(BASE_DIR, 'delivery.db')
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 def force_init_db():
     with app.app_context():
         try:
