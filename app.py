@@ -2422,6 +2422,7 @@ def register():
                 </label>
             </div>
 
+                                  
             <button class="w-full bg-green-600 text-white py-6 rounded-3xl font-black text-lg shadow-xl mt-6 hover:bg-green-700 transition active:scale-95 text-center text-center">가입 완료</button>
         </form>
     </div>""" + FOOTER_HTML)
