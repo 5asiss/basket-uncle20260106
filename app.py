@@ -364,7 +364,7 @@ HEADER_HTML = """
     <meta name="naver-site-verification" content="11c3f5256fbdca16c2d7008b7cf7d0feff9b056b" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="바구니 삼촌은 농산물·식자재를 중간 유통 없이 직접 연결하고 최소 배송비만 받는 신개념 물류·구매대행 서비스입니다.">
-<title>바구니 삼촌 |  basam</title>
+<title> 테스트 |  basam</title>
 
     <title>최저가 쇼핑몰 - 농산물·식자재 배송 신개념 6PL 생활서비스 basam </title>
     <script src="https://js.tosspayments.com/v1/payment"></script>
