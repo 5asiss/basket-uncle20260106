@@ -8,7 +8,7 @@ import re
 import random # 최신상품 랜덤 노출을 위해 추가
 
 import pandas as pd
-from flask import Flask, render_template_string, request, redirect, url_for, session, send_file, flash, jsonify
+from flask import Flask, render_template_string, request, redirect, url_for, session, send_file, flash, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -2422,10 +2422,14 @@ def register():
                 </label>
             </div>
 
-                                  
             <button class="w-full bg-green-600 text-white py-6 rounded-3xl font-black text-lg shadow-xl mt-6 hover:bg-green-700 transition active:scale-95 text-center text-center">가입 완료</button>
         </form>
     </div>""" + FOOTER_HTML)
+
+@app.route('/logout')
+def logout(): 
+    """로그아웃"""
+    logout_user(); return redirect('/')
 # ✅ PWA 필수 파일들을 브라우저에게 던져주는 통로
 @app.route('/manifest.json')
 def serve_manifest():
@@ -2434,10 +2438,6 @@ def serve_manifest():
 @app.route('/sw.js')
 def serve_sw():
     return send_from_directory('static', 'sw.js', mimetype='application/javascript')
-@app.route('/logout')
-def logout(): 
-    """로그아웃"""
-    logout_user(); return redirect('/')
 @app.route('/mypage/update_address', methods=['POST'])
 @login_required
 def update_address():
