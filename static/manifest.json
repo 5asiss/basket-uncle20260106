@@ -1,7 +1,7 @@
 {
-  "name": "바구니 삼촌몰",
+  "name": "바구니 삼촌 - 송도 최저가 쇼핑몰",
   "short_name": "바구니삼촌",
-  "description": "송도 전용 신개념 6PL 구매대행 서비스",
+  "description": "인천 송도 전용 신개념 6PL 구매대행 및 배송 서비스",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -10,12 +10,12 @@
     {
       "src": "/static/logo/side1.jpg",
       "sizes": "192x192",
-      "type": "image/jpg"
+      "type": "image/jpeg"
     },
     {
       "src": "/static/logo/side1.jpg",
       "sizes": "512x512",
-      "type": "image/jpg"
+      "type": "image/jpeg"
     }
   ]
 }

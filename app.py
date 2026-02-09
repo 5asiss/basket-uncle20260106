@@ -2425,7 +2425,14 @@ def register():
             <button class="w-full bg-green-600 text-white py-6 rounded-3xl font-black text-lg shadow-xl mt-6 hover:bg-green-700 transition active:scale-95 text-center text-center">가입 완료</button>
         </form>
     </div>""" + FOOTER_HTML)
+# ✅ PWA 필수 파일들을 브라우저에게 던져주는 통로
+@app.route('/manifest.json')
+def serve_manifest():
+    return send_from_directory('static', 'manifest.json')
 
+@app.route('/sw.js')
+def serve_sw():
+    return send_from_directory('static', 'sw.js', mimetype='application/javascript')
 @app.route('/logout')
 def logout(): 
     """로그아웃"""
