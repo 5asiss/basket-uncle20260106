@@ -613,12 +613,52 @@ HEADER_HTML = """
     {% if current_user.is_authenticated %}
     startLogoutTimer();
     {% endif %}
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // 버튼이 있는 바를 화면에 표시
+        const installBar = document.getElementById('pwa-install-bar');
+        if (installBar) installBar.classList.remove('hidden');
+    });
+
+    function triggerPWAInstall() {
+        const installBar = document.getElementById('pwa-install-bar');
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                if (installBar) installBar.classList.add('hidden');
+            }
+            deferredPrompt = null;
+        });
+    }
+
+    function hideInstallBar() {
+        const installBar = document.getElementById('pwa-install-bar');
+        if (installBar) installBar.classList.add('hidden');
+    }
 </script>
+
 """
 
 FOOTER_HTML = """
     </main>
-
+<div id="pwa-install-bar" class="fixed bottom-20 left-4 right-4 z-[9999] hidden">
+        <div class="bg-slate-900 text-white p-4 rounded-3xl shadow-2xl flex items-center justify-between border border-slate-700">
+            <div class="flex items-center gap-3">
+                <img src="/static/logo/side1.jpg" class="w-10 h-10 rounded-xl" onerror="this.src='https://placehold.co/100x100?text=Logo'">
+                <div>
+                    <p class="text-sm font-black text-white">바구니삼촌 앱 설치</p>
+                    <p class="text-[10px] text-slate-400 font-bold">1초만에 홈 화면에 추가하기</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="hideInstallBar()" class="text-slate-500 text-xs px-2 font-bold">닫기</button>
+                <button onclick="triggerPWAInstall()" class="bg-green-600 text-white px-4 py-2 rounded-xl text-xs font-black shadow-lg shadow-green-900/20">설치</button>
+            </div>
+        </div>
+    </div>
     <footer class="bg-gray-900 text-gray-400 py-12 md:py-20 border-t border-white/5 mt-20">
         <div class="max-w-7xl mx-auto px-6">
             
@@ -803,6 +843,7 @@ FOOTER_HTML = """
                 }
             }).open();
         }
+        
     </script>
 <script>
 function openUncleModal(type) {
@@ -922,6 +963,7 @@ function closeUncleModal() {
   document.getElementById('uncleModal').classList.add('hidden');
   document.getElementById('uncleModal').classList.remove('flex');
 }
+
 </script>
 
 </body>
