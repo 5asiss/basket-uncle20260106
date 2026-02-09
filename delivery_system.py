@@ -1217,6 +1217,7 @@ def logi_admin_users_mgmt():
     return render_template_string(html, users=users)
 
 # 삭제 라우트 추가
+
 @logi_bp.route('/admin/delete_user/<int:uid>')
 def logi_delete_admin(uid):
     if session.get('admin_username') == 'admin':

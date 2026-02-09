@@ -450,6 +450,22 @@ HEADER_HTML = """
         .card-padding { padding: 1rem !important; }
     }
 </style>
+<link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#059669">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="바구니삼촌">
+    <link rel="apple-touch-icon" href="/static/logo/side1.jpg">
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then(reg => console.log('서비스 워커 등록 완료!'))
+                    .catch(err => console.log('등록 실패:', err));
+            });
+        }
+    </script>
 </head>
 <body class="text-left font-black">
     <div id="toast">메시지가 표시됩니다. 🧺</div>

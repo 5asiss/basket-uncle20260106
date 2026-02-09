@@ -1,0 +1,21 @@
+{
+  "name": "바구니 삼촌몰",
+  "short_name": "바구니삼촌",
+  "description": "송도 전용 신개념 6PL 구매대행 서비스",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#059669",
+  "icons": [
+    {
+      "src": "/static/logo/side1.jpg",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "/static/logo/side1.jpg",
+      "sizes": "512x512",
+      "type": "image/jpg"
+    }
+  ]
+}
