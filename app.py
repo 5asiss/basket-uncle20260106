@@ -2438,6 +2438,10 @@ def serve_manifest():
 @app.route('/sw.js')
 def serve_sw():
     return send_from_directory('static', 'sw.js', mimetype='application/javascript')
+# 2440번째 줄 근처 (PWA 서빙 코드 있는 곳)에 추가
+@app.route('/static/logo/<path:filename>')
+def serve_logo(filename):
+    return send_from_directory('static/logo', filename)
 @app.route('/mypage/update_address', methods=['POST'])
 @login_required
 def update_address():
