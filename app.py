@@ -362,8 +362,8 @@ HEADER_HTML = """
     <meta charset="UTF-8">
     <meta name="naver-site-verification" content="11c3f5256fbdca16c2d7008b7cf7d0feff9b056b" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="컬렉션의 순간을 담다. 프리미엄 의류 쇼핑몰 - 감각적인 디자인과 완벽한 품질">
-    <title>COLLECTION — 프리미엄 의류 쇼핑몰</title>
+    <meta name="description" content="DOVE. 순수한 순간을 담다. 프리미엄 의류 쇼핑몰 - 감각적인 디자인과 완벽한 품질">
+    <title>DOVE — 프리미엄 의류 쇼핑몰</title>
     <script src="https://js.tosspayments.com/v1/payment"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -456,7 +456,7 @@ HEADER_HTML = """
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="COLLECTION">
+    <meta name="apple-mobile-web-app-title" content="DOVE">
     <link rel="apple-touch-icon" href="/static/logo/side1.jpg">
     
     <script>
@@ -491,7 +491,7 @@ HEADER_HTML = """
     <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
     <div id="sidebar" class="p-12 flex flex-col h-full">
         <div class="flex justify-between items-center mb-16">
-            <span class="font-serif text-2xl font-medium text-[#0a0a0a] tracking-[0.2em]">COLLECTION</span>
+            <span class="font-serif text-2xl font-medium text-[#0a0a0a] tracking-[0.35em]">DOVE</span>
             <button onclick="toggleSidebar()" class="text-[#2c2c2c]/60 hover:text-[#0a0a0a] text-xl transition"><i class="fas fa-times"></i></button>
         </div>
         <nav class="space-y-6 flex-1">
@@ -514,7 +514,7 @@ HEADER_HTML = """
                     <button onclick="toggleSidebar()" class="text-[#0a0a0a]/70 hover:text-[#0a0a0a] text-lg transition">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <a href="/" class="font-serif text-xl md:text-2xl font-medium text-[#0a0a0a] tracking-[0.2em] hover:text-[#c9a962] transition">COLLECTION</a>
+                    <a href="/" class="font-serif text-xl md:text-2xl font-medium text-[#0a0a0a] tracking-[0.35em] hover:text-[#c9a962] transition">DOVE</a>
                 </div>
 
                 <div class="hidden md:flex items-center gap-12">
@@ -642,7 +642,7 @@ FOOTER_HTML = """
             <div class="flex items-center gap-4">
                 <img src="/static/logo/side1.jpg" class="w-12 h-12 object-cover" onerror="this.src='https://placehold.co/100x100?text=Logo'">
                 <div>
-                    <p class="text-sm font-medium tracking-[0.1em]">COLLECTION 앱 설치</p>
+                    <p class="text-sm font-medium tracking-[0.1em]">DOVE 앱 설치</p>
                     <p class="text-[10px] text-[#faf9f7]/60 tracking-wide">홈 화면에 추가하기</p>
                 </div>
             </div>
@@ -656,7 +656,7 @@ FOOTER_HTML = """
         <div class="max-w-[1400px] mx-auto px-5 md:px-10">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center pb-16 mb-16 border-b border-white/10 gap-12">
                 <div>
-                    <p class="font-serif text-2xl md:text-3xl font-light tracking-[0.25em] mb-3">COLLECTION</p>
+                    <p class="font-serif text-2xl md:text-3xl font-light tracking-[0.35em] mb-3">DOVE</p>
                     <p class="text-[11px] text-[#c9a962] font-medium tracking-[0.2em] uppercase">Premium Fashion</p>
                 </div>
                 <div class="flex flex-col md:items-end gap-4">
@@ -679,10 +679,10 @@ FOOTER_HTML = """
             </div>
 
             <div class="text-[10px] md:text-[11px] space-y-2 text-[#faf9f7]/40 leading-relaxed">
-                <p>상호: 최저가 쇼핑몰 | 대표: 금창권 | 개인정보관리책임자: 금창권</p>
+                <p>상호: (주)DOVE | 대표: 금창권 | 개인정보관리책임자: 금창권</p>
                 <p>주소: 인천광역시 연수구 하모니로158, D동 317호 (송도동, 송도 타임스페이스)</p>
                 <p>사업자등록번호: 472-93-02262 | 통신판매업신고: 제 2025-인천연수-3388호</p>
-                <p class="pt-8 text-[#faf9f7]/30 tracking-[0.3em] uppercase">© 2026 COLLECTION. All Rights Reserved.</p>
+                <p class="pt-8 text-[#faf9f7]/30 tracking-[0.3em] uppercase">© 2026 DOVE. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
@@ -726,7 +726,7 @@ FOOTER_HTML = """
     },
             'privacy': {
                 'title': '개인정보처리방침',
-                'content': '<b>개인정보의 수집 및 이용</b><br>최저가 쇼핑몰은 주문 처리, 상품 배송, 고객 상담을 위해 필수적인 개인정보를 수집하며, 관계 법령에 따라 안전하게 보호합니다.'
+                'content': '<b>개인정보의 수집 및 이용</b><br>DOVE는 주문 처리, 상품 배송, 고객 상담을 위해 필수적인 개인정보를 수집하며, 관계 법령에 따라 안전하게 보호합니다.'
             },
             'agency': {
                 'title': '서비스 이용 안내',
@@ -1261,8 +1261,9 @@ def index():
 <section class="luxe-hero">
     <div class="max-w-4xl mx-auto px-8 md:px-12 text-center relative z-10">
         <p class="text-[#c9a962] text-[11px] md:text-xs font-medium tracking-[0.4em] uppercase mb-8">New Season</p>
-        <h1 class="font-serif text-4xl md:text-6xl lg:text-7xl font-light tracking-wide mb-6 leading-[1.1]">
-            컬렉션의 순간을 담다
+        <p class="font-serif text-5xl md:text-7xl lg:text-8xl font-light tracking-[0.25em] mb-4 text-[#faf9f7]">DOVE</p>
+        <h1 class="font-serif text-2xl md:text-3xl lg:text-4xl font-light tracking-[0.15em] mb-6 leading-[1.2] text-[#faf9f7]/90">
+            순수한 순간을 담다
         </h1>
         <div class="luxe-divider mx-auto mb-8"></div>
         <p class="text-[#faf9f7]/80 text-sm md:text-base font-light max-w-xl mx-auto mb-12 leading-relaxed tracking-wide">
@@ -2259,9 +2260,9 @@ def mypage():
             
             <div class="p-8 space-y-8 text-left bg-white">
                 <div class="text-center border-b-2 border-[#0a0a0a] pb-6">
-                    <h3 class="font-serif text-xl font-light text-[#0a0a0a] mb-2">COLLECTION</h3>
+                    <h3 class="font-serif text-xl font-light text-[#0a0a0a] mb-2 tracking-[0.2em]">DOVE</h3>
                     <div class="text-[10px] text-gray-500 font-bold space-y-1">
-                        <p>사업자번호: 472-93-02262</p>
+                        <p>상호: (주)DOVE | 사업자번호: 472-93-02262</p>
                         <p>대표: 금창권 | 고객센터: 1666-8320</p>
                         <p>인천광역시 연수구 하모니로158, D동 317호</p>
                     </div>
@@ -2691,7 +2692,7 @@ def order_payment():
             안전 결제 시스템 연결
         </h2>
         <p class="text-gray-400 font-bold text-sm md:text-base mb-12 leading-relaxed">
-            최저가 쇼핑몰은 토스페이먼츠의 보안망을 통해<br>고객님의 결제 정보를 안전하게 보호합니다.
+            DOVE는 토스페이먼츠의 보안망을 통해<br>고객님의 결제 정보를 안전하게 보호합니다.
         </p>
 
         <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-xl mb-12 text-left space-y-4">
@@ -2986,55 +2987,55 @@ def admin_dashboard():
     # 3. HTML 템플릿 코드
     # 3. HTML 템플릿 코드 (카테고리 설정 탭 완벽 복구본)
     admin_html = """
-    <div class="max-w-7xl mx-auto py-12 px-4 md:px-6 font-black text-xs md:text-sm text-left">
-        <div class="flex justify-between items-center mb-10">
-            <h2 class="text-2xl md:text-3xl font-black text-orange-700 italic">Admin Panel</h2>
-            <div class="flex gap-2">
-                 <a href="/" class="px-4 py-2 bg-gray-100 rounded-xl text-[10px] hover:bg-gray-200 transition">홈으로</a>
-                 <a href="/logout" class="px-4 py-2 bg-red-50 text-red-500 rounded-xl text-[10px] hover:bg-red-100 transition">로그아웃</a>
+    <div class="max-w-7xl mx-auto py-16 px-5 md:px-10">
+        <div class="flex justify-between items-center mb-12">
+            <h2 class="font-serif text-2xl md:text-3xl font-light text-[#0a0a0a] tracking-wide">Admin</h2>
+            <div class="flex gap-3">
+                <a href="/" class="px-4 py-2 border border-black/20 text-[#0a0a0a] text-xs font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">Home</a>
+                <a href="/logout" class="px-4 py-2 border border-black/20 text-[#2c2c2c]/70 text-xs font-medium hover:border-[#0a0a0a] hover:text-[#0a0a0a] transition">Logout</a>
             </div>
         </div>
         
-        <div class="flex border-b border-gray-100 mb-12 bg-white rounded-t-3xl overflow-x-auto">
-            <a href="/admin?tab=products" class="px-8 py-5 {% if tab == 'products' %}border-b-4 border-orange-500 text-orange-600{% endif %}">상품 관리</a>
-            {% if is_master %}<a href="/admin?tab=categories" class="px-8 py-5 {% if tab == 'categories' %}border-b-4 border-orange-500 text-orange-600{% endif %}">카테고리 설정</a>{% endif %}
-            {% if is_master %}<a href="/admin/reseed_clothing" class="px-8 py-5 text-[10px] text-gray-400 hover:text-orange-600" onclick="return confirm('기존 카테고리/상품을 모두 삭제하고 의류 데이터로 재생성합니다. 계속할까요?')">의류 데이터 초기화</a>{% endif %}
-            <a href="/admin?tab=orders" class="px-8 py-5 {% if tab == 'orders' %}border-b-4 border-orange-500 text-orange-600{% endif %}">주문 및 매출 집계</a>
-            <a href="/admin?tab=reviews" class="px-8 py-5 {% if tab == 'reviews' %}border-b-4 border-orange-500 text-orange-600{% endif %}">리뷰 관리</a>
+        <div class="flex border-b border-black/5 mb-12 overflow-x-auto gap-1">
+            <a href="/admin?tab=products" class="px-6 py-4 text-xs font-medium tracking-wide {% if tab == 'products' %}border-b-2 border-[#0a0a0a] text-[#0a0a0a]{% else %}text-[#2c2c2c]/60 hover:text-[#0a0a0a]{% endif %} transition">상품</a>
+            {% if is_master %}<a href="/admin?tab=categories" class="px-6 py-4 text-xs font-medium tracking-wide {% if tab == 'categories' %}border-b-2 border-[#0a0a0a] text-[#0a0a0a]{% else %}text-[#2c2c2c]/60 hover:text-[#0a0a0a]{% endif %} transition">카테고리</a>{% endif %}
+            {% if is_master %}<a href="/admin/reseed_clothing" class="px-6 py-4 text-[10px] text-[#2c2c2c]/40 hover:text-[#c9a962]" onclick="return confirm('기존 카테고리/상품을 모두 삭제하고 의류 데이터로 재생성합니다. 계속할까요?')">데이터 초기화</a>{% endif %}
+            <a href="/admin?tab=orders" class="px-6 py-4 text-xs font-medium tracking-wide {% if tab == 'orders' %}border-b-2 border-[#0a0a0a] text-[#0a0a0a]{% else %}text-[#2c2c2c]/60 hover:text-[#0a0a0a]{% endif %} transition">주문</a>
+            <a href="/admin?tab=reviews" class="px-6 py-4 text-xs font-medium tracking-wide {% if tab == 'reviews' %}border-b-2 border-[#0a0a0a] text-[#0a0a0a]{% else %}text-[#2c2c2c]/60 hover:text-[#0a0a0a]{% endif %} transition">리뷰</a>
         </div>
 
         {% if tab == 'products' %}
-            <div id="excel_upload_form" class="hidden mb-8 bg-blue-50 p-8 rounded-[2rem] border border-blue-100">
-                <p class="font-black text-blue-700 mb-4">📦 엑셀 상품 대량 등록</p>
+            <div id="excel_upload_form" class="hidden mb-8 border border-black/5 p-8">
+                <p class="font-medium text-[#0a0a0a] mb-4 text-sm">엑셀 상품 대량 등록</p>
                 <form action="/admin/product/bulk_upload" method="POST" enctype="multipart/form-data" class="flex gap-4">
-                    <input type="file" name="excel_file" class="bg-white p-3 rounded-xl flex-1 text-xs" required>
-                    <button type="submit" class="bg-blue-600 text-white px-8 rounded-xl font-black">업로드 시작</button>
+                    <input type="file" name="excel_file" class="flex-1 p-3 border border-black/10 text-xs text-[#0a0a0a]" required>
+                    <button type="submit" class="border border-[#0a0a0a] text-[#0a0a0a] px-6 py-3 text-xs font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">업로드</button>
                 </form>
             </div>
             <div class="flex justify-between items-center mb-8">
                 <form action="/admin" class="flex gap-3">
                     <input type="hidden" name="tab" value="products">
-                    <select name="category" onchange="this.form.submit()" class="border-none bg-white shadow-sm p-3 rounded-2xl text-[11px] font-black">
+                    <select name="category" onchange="this.form.submit()" class="border border-black/10 p-3 text-xs font-medium bg-[#faf9f7]">
                         <option value="전체">전체 카테고리</option>
                         {% for c in categories %}<option value="{{c.name}}" {% if sel_cat == c.name %}selected{% endif %}>{{c.name}}</option>{% endfor %}
                     </select>
                 </form>
                 <div class="flex gap-3">
-                    <button onclick="document.getElementById('excel_upload_form').classList.toggle('hidden')" class="bg-blue-600 text-white px-5 py-3 rounded-2xl font-black text-[10px] shadow-lg">엑셀 업로드</button>
-                    <a href="/admin/add" class="bg-green-600 text-white px-5 py-3 rounded-2xl font-black text-[10px] shadow-lg">+ 상품 등록</a>
+                    <button onclick="document.getElementById('excel_upload_form').classList.toggle('hidden')" class="border border-black/20 text-[#0a0a0a] px-5 py-2.5 text-xs font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">엑셀</button>
+                    <a href="/admin/add" class="border border-[#0a0a0a] text-[#0a0a0a] px-5 py-2.5 text-xs font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">+ 상품 등록</a>
                 </div>
             </div>
-            <div class="bg-white rounded-[2rem] shadow-sm border border-gray-50 overflow-hidden">
+            <div class="border border-black/5 overflow-hidden">
                 <table class="w-full text-left">
-                    <thead class="bg-gray-50 border-b border-gray-100 text-gray-400 text-[10px]">
-                        <tr><th class="p-6">상품정보</th><th class="p-6 text-center">재고</th><th class="p-6 text-center">관리</th></tr>
+                    <thead class="bg-[#faf9f7] border-b border-black/5 text-[10px] text-[#2c2c2c]/60 font-medium">
+                        <tr><th class="p-5">상품정보</th><th class="p-5 text-center">재고</th><th class="p-5 text-center">관리</th></tr>
                     </thead>
                     <tbody>
                         {% for p in products %}
-                        <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition">
-                            <td class="p-6"><b class="text-gray-800 text-sm">{{ p.name }}</b><br><span class="text-green-600 text-[10px]">{{ p.description or '' }}</span></td>
-                            <td class="p-6 text-center font-black">{{ p.stock }}개</td>
-                            <td class="p-6 text-center space-x-2"><a href="/admin/edit/{{p.id}}" class="text-blue-500">수정</a><a href="/admin/delete/{{p.id}}" class="text-red-300" onclick="return confirm('삭제?')">삭제</a></td>
+                        <tr class="border-b border-black/5 hover:bg-[#faf9f7]/50 transition">
+                            <td class="p-5"><span class="font-medium text-[#0a0a0a] text-sm">{{ p.name }}</span><br><span class="text-[#2c2c2c]/50 text-[10px]">{{ p.description or '' }}</span></td>
+                            <td class="p-5 text-center font-medium text-[#0a0a0a]">{{ p.stock }}개</td>
+                            <td class="p-5 text-center space-x-3 text-xs"><a href="/admin/edit/{{p.id}}" class="text-[#c9a962] hover:underline">수정</a><a href="/admin/delete/{{p.id}}" class="text-[#2c2c2c]/50 hover:text-[#0a0a0a]" onclick="return confirm('삭제?')">삭제</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -3042,50 +3043,44 @@ def admin_dashboard():
             </div>
 
         {% elif tab == 'categories' %}
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 text-left">
-                <div class="bg-white p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] border border-gray-50 shadow-sm h-fit">
-                    <h3 class="text-[11px] md:text-sm text-gray-400 uppercase tracking-widest mb-10 font-black">판매 카테고리 및 사업자 추가</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div class="border border-black/5 p-8 md:p-10">
+                    <h3 class="text-[10px] text-[#2c2c2c]/50 uppercase tracking-[0.2em] mb-8 font-medium">카테고리 추가</h3>
                     <form action="/admin/category/add" method="POST" class="space-y-5">
-                        <input name="cat_name" placeholder="카테고리명 (예: 산지직송 농산물)" class="border border-gray-100 p-5 rounded-2xl w-full font-black text-sm" required>
-                        <textarea name="description" placeholder="카테고리 설명 (배송 정책 등)" class="border border-gray-100 p-5 rounded-2xl w-full h-24 font-black text-sm"></textarea>
-                        <input name="manager_email" placeholder="관리 매니저 이메일 (로그인 ID)" class="border border-gray-100 p-5 rounded-2xl w-full font-black text-sm">
-                        <select name="tax_type" class="border border-gray-100 p-5 rounded-2xl w-full font-black text-sm bg-white">
-                            <option value="과세">일반 과세 상품</option>
-                            <option value="면세">면세 농축산물</option>
+                        <input name="cat_name" placeholder="카테고리명" class="border border-black/10 p-4 w-full font-medium text-sm focus:border-[#0a0a0a] outline-none" required>
+                        <textarea name="description" placeholder="설명" class="border border-black/10 p-4 w-full h-24 font-medium text-sm"></textarea>
+                        <input name="manager_email" placeholder="매니저 이메일" class="border border-black/10 p-4 w-full font-medium text-sm">
+                        <select name="tax_type" class="border border-black/10 p-4 w-full font-medium text-sm bg-[#faf9f7]">
+                            <option value="과세">과세</option>
+                            <option value="면세">면세</option>
                         </select>
-                        <div class="border-t border-gray-100 pt-8 space-y-4">
-                            <p class="text-[10px] text-green-600 font-bold tracking-widest uppercase">Seller Business Profile</p>
-                            <input name="biz_name" placeholder="사업자 상호명" class="border border-gray-100 p-4 rounded-xl w-full font-bold text-xs md:text-sm">
-                            <input name="biz_representative" placeholder="대표자 성함" class="border border-gray-100 p-4 rounded-xl w-full font-bold text-xs md:text-sm">
-                            <input name="biz_reg_number" placeholder="사업자 등록번호 ( - 포함 )" class="border border-gray-100 p-4 rounded-xl w-full font-bold text-xs md:text-sm">
-                            <input name="biz_address" placeholder="사업장 소재지" class="border border-gray-100 p-4 rounded-xl w-full font-bold text-xs md:text-sm">
-                            <input name="biz_contact" placeholder="고객 센터 번호" class="border border-gray-100 p-4 rounded-xl w-full font-bold text-xs md:text-sm">
-                            <input name="seller_link" placeholder="판매자 문의 링크" class="border border-gray-100 p-4 rounded-xl w-full font-bold text-xs md:text-sm">
+                        <div class="border-t border-black/5 pt-8 space-y-4">
+                            <p class="text-[10px] text-[#c9a962] uppercase tracking-[0.15em]">사업자 정보</p>
+                            <input name="biz_name" placeholder="상호명" class="border border-black/10 p-4 w-full font-medium text-xs">
+                            <input name="biz_representative" placeholder="대표자" class="border border-black/10 p-4 w-full font-medium text-xs">
+                            <input name="biz_reg_number" placeholder="사업자등록번호" class="border border-black/10 p-4 w-full font-medium text-xs">
+                            <input name="biz_address" placeholder="주소" class="border border-black/10 p-4 w-full font-medium text-xs">
+                            <input name="biz_contact" placeholder="고객센터" class="border border-black/10 p-4 w-full font-medium text-xs">
+                            <input name="seller_link" placeholder="문의 링크" class="border border-black/10 p-4 w-full font-medium text-xs">
                         </div>
-                        <button class="w-full bg-green-600 text-white py-5 rounded-3xl font-black text-base md:text-lg shadow-xl hover:bg-green-700 transition">신규 카테고리 생성</button>
+                        <button class="w-full border-2 border-[#0a0a0a] text-[#0a0a0a] py-4 font-medium text-sm hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">생성</button>
                     </form>
                 </div>
                 
-                <div class="bg-white rounded-[2.5rem] md:rounded-[3.5rem] border border-gray-50 shadow-sm overflow-hidden h-fit">
+                <div class="border border-black/5 overflow-hidden">
                     <table class="w-full text-left">
-                        <thead class="bg-gray-50 border-b border-gray-100 font-bold uppercase text-[10px] md:text-xs">
-                            <tr><th class="p-6">순서</th><th class="p-6">카테고리 정보</th><th class="p-6 text-center">관리</th></tr>
+                        <thead class="bg-[#faf9f7] border-b border-black/5 text-[10px] text-[#2c2c2c]/60 font-medium">
+                            <tr><th class="p-5">순서</th><th class="p-5">카테고리</th><th class="p-5 text-center">관리</th></tr>
                         </thead>
                         <tbody>
                             {% for c in categories %}
-                            <tr class="border-b border-gray-50 hover:bg-gray-50/50 transition">
-                                <td class="p-6 flex gap-2">
-                                    <a href="/admin/category/move/{{c.id}}/up" class="text-blue-500 hover:scale-125 transition"><i class="fas fa-chevron-up"></i></a>
-                                    <a href="/admin/category/move/{{c.id}}/down" class="text-red-500 hover:scale-125 transition"><i class="fas fa-chevron-down"></i></a>
+                            <tr class="border-b border-black/5 hover:bg-[#faf9f7]/50 transition">
+                                <td class="p-5 flex gap-2">
+                                    <a href="/admin/category/move/{{c.id}}/up" class="text-[#c9a962] hover:text-[#0a0a0a]"><i class="fas fa-chevron-up"></i></a>
+                                    <a href="/admin/category/move/{{c.id}}/down" class="text-[#c9a962] hover:text-[#0a0a0a]"><i class="fas fa-chevron-down"></i></a>
                                 </td>
-                                <td class="p-6">
-                                    <b class="text-gray-800">{{ c.name }}</b><br>
-                                    <span class="text-gray-400 text-[10px]">매니저: {{ c.manager_email or '미지정' }}</span>
-                                </td>
-                                <td class="p-6 text-center space-x-3 text-[10px]">
-                                    <a href="/admin/category/edit/{{c.id}}" class="text-blue-500 font-bold hover:underline">수정</a>
-                                    <a href="/admin/category/delete/{{c.id}}" class="text-red-200 hover:text-red-500 transition" onclick="return confirm('삭제하시겠습니까?')">삭제</a>
-                                </td>
+                                <td class="p-5"><span class="font-medium text-[#0a0a0a]">{{ c.name }}</span><br><span class="text-[#2c2c2c]/50 text-[10px]">{{ c.manager_email or '미지정' }}</span></td>
+                                <td class="p-5 text-center space-x-3 text-xs"><a href="/admin/category/edit/{{c.id}}" class="text-[#c9a962] hover:underline">수정</a><a href="/admin/category/delete/{{c.id}}" class="text-[#2c2c2c]/50 hover:text-[#0a0a0a]" onclick="return confirm('삭제?')">삭제</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -3094,47 +3089,47 @@ def admin_dashboard():
             </div>
 
         {% elif tab == 'orders' %}
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 text-left">
-                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm"><p class="text-[9px] text-gray-400 font-black uppercase mb-1">Total Sales</p><p class="text-xl font-black text-green-600">{{ "{:,}".format(stats.sales) }}원</p></div>
-                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm"><p class="text-[9px] text-gray-400 font-black uppercase mb-1">Orders</p><p class="text-xl font-black text-gray-800">{{ stats.count }}건</p></div>
-                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm"><p class="text-[9px] text-gray-400 font-black uppercase mb-1">Delivery Fees</p><p class="text-xl font-black text-orange-500">{{ "{:,}".format(stats.delivery) }}원</p></div>
-                <div class="bg-gray-800 p-6 rounded-[2rem] shadow-xl"><p class="text-[9px] text-gray-400 font-black uppercase mb-1 text-white/50">Grand Total</p><p class="text-xl font-black text-white">{{ "{:,}".format(stats.grand_total) }}원</p></div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="border border-black/5 p-6"><p class="text-[9px] text-[#2c2c2c]/50 uppercase tracking-wider mb-1">매출</p><p class="text-lg font-medium text-[#0a0a0a]">{{ "{:,}".format(stats.sales) }}원</p></div>
+                <div class="border border-black/5 p-6"><p class="text-[9px] text-[#2c2c2c]/50 uppercase tracking-wider mb-1">주문</p><p class="text-lg font-medium text-[#0a0a0a]">{{ stats.count }}건</p></div>
+                <div class="border border-black/5 p-6"><p class="text-[9px] text-[#2c2c2c]/50 uppercase tracking-wider mb-1">배송비</p><p class="text-lg font-medium text-[#0a0a0a]">{{ "{:,}".format(stats.delivery) }}원</p></div>
+                <div class="border-2 border-[#0a0a0a] bg-[#0a0a0a] p-6"><p class="text-[9px] text-[#faf9f7]/60 uppercase tracking-wider mb-1">합계</p><p class="text-lg font-medium text-[#faf9f7]">{{ "{:,}".format(stats.grand_total) }}원</p></div>
             </div>
 
-            <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm mb-12">
+            <div class="border border-black/5 p-8 mb-12">
                 <div class="flex gap-2 mb-6">
-                    <button type="button" onclick="setDateRange('today')" class="px-4 py-2 bg-gray-100 rounded-xl text-[10px] font-black hover:bg-green-100 transition">오늘</button>
-                    <button type="button" onclick="setDateRange('7days')" class="px-4 py-2 bg-gray-100 rounded-xl text-[10px] font-black hover:bg-green-100 transition">최근 7일</button>
-                    <button type="button" onclick="setDateRange('month')" class="px-4 py-2 bg-gray-100 rounded-xl text-[10px] font-black hover:bg-green-100 transition">이번 달</button>
+                    <button type="button" onclick="setDateRange('today')" class="px-4 py-2 border border-black/10 text-xs font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">오늘</button>
+                    <button type="button" onclick="setDateRange('7days')" class="px-4 py-2 border border-black/10 text-xs font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">7일</button>
+                    <button type="button" onclick="setDateRange('month')" class="px-4 py-2 border border-black/10 text-xs font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">이번 달</button>
                 </div>
                 <form action="/admin" method="GET" id="date-filter-form" class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
                     <input type="hidden" name="tab" value="orders">
-                    <div><label class="text-[10px] text-gray-400 font-black ml-2">시작 일시</label><input type="datetime-local" name="start_date" id="start_date" value="{{ start_date_str.replace(' ', 'T') }}" class="w-full border-none bg-gray-50 p-4 rounded-2xl font-black text-xs"></div>
-                    <div><label class="text-[10px] text-gray-400 font-black ml-2">종료 일시</label><input type="datetime-local" name="end_date" id="end_date" value="{{ end_date_str.replace(' ', 'T') }}" class="w-full border-none bg-gray-50 p-4 rounded-2xl font-black text-xs"></div>
-                    <div><label class="text-[10px] text-gray-400 font-black ml-2">카테고리</label><select name="order_cat" class="w-full border-none bg-gray-50 p-4 rounded-2xl font-black text-xs bg-white"><option value="전체">모든 품목 합산</option>{% for c in nav_categories %}<option value="{{c.name}}" {% if sel_order_cat == c.name %}selected{% endif %}>{{c.name}}</option>{% endfor %}</select></div>
-                    <button type="submit" class="bg-green-600 text-white py-4 rounded-2xl font-black shadow-lg">조회하기</button>
+                    <div><label class="text-[10px] text-[#2c2c2c]/50 ml-2 block mb-1">시작</label><input type="datetime-local" name="start_date" id="start_date" value="{{ start_date_str.replace(' ', 'T') }}" class="w-full border border-black/10 p-4 text-xs font-medium"></div>
+                    <div><label class="text-[10px] text-[#2c2c2c]/50 ml-2 block mb-1">종료</label><input type="datetime-local" name="end_date" id="end_date" value="{{ end_date_str.replace(' ', 'T') }}" class="w-full border border-black/10 p-4 text-xs font-medium"></div>
+                    <div><label class="text-[10px] text-[#2c2c2c]/50 ml-2 block mb-1">카테고리</label><select name="order_cat" class="w-full border border-black/10 p-4 text-xs font-medium bg-[#faf9f7]"><option value="전체">전체</option>{% for c in nav_categories %}<option value="{{c.name}}" {% if sel_order_cat == c.name %}selected{% endif %}>{{c.name}}</option>{% endfor %}</select></div>
+                    <button type="submit" class="border-2 border-[#0a0a0a] text-[#0a0a0a] py-4 text-xs font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">조회</button>
                 </form>
             </div>
 
             <div class="mb-12">
-                <h3 class="text-lg font-black text-gray-800 mb-6 italic">💰 카테고리 매니저별 정산 현황</h3>
-                <div class="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden text-left">
+                <h3 class="text-sm font-medium text-[#0a0a0a] mb-6 tracking-wide">정산 현황</h3>
+                <div class="border border-black/5 overflow-hidden">
                     <table class="w-full text-left">
-                        <thead class="bg-gray-50 border-b border-gray-100 text-[10px] text-gray-400 font-black">
-                            <tr><th class="p-5">카테고리명</th><th class="p-5">매니저</th><th class="p-5 text-right">정산 대상 금액</th><th class="p-5 text-center">상태</th><th class="p-5 text-center">액션</th></tr>
+                        <thead class="bg-[#faf9f7] border-b border-black/5 text-[10px] text-[#2c2c2c]/60 font-medium">
+                            <tr><th class="p-5">카테고리</th><th class="p-5">매니저</th><th class="p-5 text-right">금액</th><th class="p-5 text-center">상태</th><th class="p-5 text-center">액션</th></tr>
                         </thead>
                         <tbody>
                             {% for cat_n, data in summary.items() %}
                             {% set cat_obj = nav_categories|selectattr("name", "equalto", cat_n)|first %}
-                            <tr class="border-b border-gray-50">
-                                <td class="p-5 font-bold">{{ cat_n }}</td>
-                                <td class="p-5 text-gray-500 text-xs">{{ cat_obj.manager_email if cat_obj else '-' }}</td>
-                                <td class="p-5 text-right font-black text-blue-600">{{ "{:,}".format(data.subtotal) }}원</td>
-                                <td class="p-5 text-center"><span class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-[10px] font-black">정산대기</span></td>
+                            <tr class="border-b border-black/5">
+                                <td class="p-5 font-medium text-[#0a0a0a]">{{ cat_n }}</td>
+                                <td class="p-5 text-[#2c2c2c]/60 text-xs">{{ cat_obj.manager_email if cat_obj else '-' }}</td>
+                                <td class="p-5 text-right font-medium text-[#c9a962]">{{ "{:,}".format(data.subtotal) }}원</td>
+                                <td class="p-5 text-center"><span class="border border-black/10 px-3 py-1 text-[10px] font-medium">대기</span></td>
                                 <td class="p-5 text-center">
                                     {% if is_master %}
-                                    <button onclick="approveSettlement('{{ cat_n }}', {{ data.subtotal }}, '{{ cat_obj.manager_email if cat_obj else '' }}')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-black shadow-md hover:bg-blue-700 transition">입금완료 승인</button>
-                                    {% else %}<span class="text-gray-300 text-[10px]">권한없음</span>{% endif %}
+                                    <button onclick="approveSettlement('{{ cat_n }}', {{ data.subtotal }}, '{{ cat_obj.manager_email if cat_obj else '' }}')" class="border border-[#0a0a0a] text-[#0a0a0a] px-4 py-2 text-[10px] font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">승인</button>
+                                    {% else %}<span class="text-[#2c2c2c]/30 text-[10px]">권한없음</span>{% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
@@ -3143,52 +3138,46 @@ def admin_dashboard():
                 </div>
             </div>
 
-            <div class="flex flex-wrap items-center gap-4 mb-8 bg-gray-50 p-6 rounded-[2.5rem] border border-gray-100">
-                <label class="flex items-center gap-2 cursor-pointer bg-white px-6 py-3 rounded-2xl shadow-sm">
-                    <input type="checkbox" id="selectAllOrders" class="w-5 h-5 accent-blue-600">
-                    <span class="text-xs font-black">전체 선택</span>
+            <div class="flex flex-wrap items-center gap-4 mb-8 border border-black/5 p-6">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="selectAllOrders" class="w-5 h-5 accent-[#0a0a0a]">
+                    <span class="text-xs font-medium">전체 선택</span>
                 </label>
-                <button onclick="requestBulkDelivery()" class="bg-blue-600 text-white px-8 py-3 rounded-2xl font-black text-xs shadow-lg">일괄 배송요청</button>
-                <button onclick="printSelectedInvoices()" class="bg-gray-800 text-white px-8 py-3 rounded-2xl font-black text-xs shadow-lg">송장 출력</button>
-                <a href="/admin/orders/excel?start_date={{start_date_str}}&end_date={{end_date_str}}" class="bg-green-100 text-green-700 px-8 py-3 rounded-2xl font-black text-xs ml-auto">Excel</a>
+                <button onclick="requestBulkDelivery()" class="border border-[#0a0a0a] text-[#0a0a0a] px-6 py-2.5 text-xs font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">일괄 배송</button>
+                <button onclick="printSelectedInvoices()" class="border border-black/20 text-[#0a0a0a] px-6 py-2.5 text-xs font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">송장</button>
+                <a href="/admin/orders/excel?start_date={{start_date_str}}&end_date={{end_date_str}}" class="border border-black/10 text-[#0a0a0a] px-6 py-2.5 text-xs font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition ml-auto">Excel</a>
             </div>
 
-            <div class="bg-white rounded-[2.5rem] shadow-xl border border-gray-50 overflow-x-auto">
-                <table class="w-full text-[10px] font-black min-w-[1200px]">
-                    <thead class="bg-gray-800 text-white">
-                        <tr><th class="p-6 text-center">선택</th><th class="p-6">일시/상태</th><th class="p-6">고객정보</th><th class="p-6">배송지</th><th class="p-6">주문내역</th><th class="p-6 text-right">관리</th></tr>
+            <div class="border border-black/5 overflow-x-auto">
+                <table class="w-full text-[10px] font-medium min-w-[1200px]">
+                    <thead class="bg-[#0a0a0a] text-[#faf9f7]">
+                        <tr><th class="p-5 text-center">선택</th><th class="p-5">일시/상태</th><th class="p-5">고객</th><th class="p-5">배송지</th><th class="p-5">주문내역</th><th class="p-5 text-right">관리</th></tr>
                     </thead>
                     <tbody>
                       {% for o in filtered_orders %}
-<tr id="row-{{ o.order_id }}" class="border-b border-gray-100 hover:bg-green-50/30 transition">
-    <td class="p-6 text-center">
+<tr id="row-{{ o.order_id }}" class="border-b border-black/5 hover:bg-[#faf9f7]/50 transition">
+    <td class="p-5 text-center">
         {% if o.status == '결제완료' and not o.is_settled %}
-            <input type="checkbox" class="order-checkbox w-5 h-5 accent-blue-600" value="{{ o.order_id }}">
+            <input type="checkbox" class="order-checkbox w-5 h-5 accent-[#0a0a0a]" value="{{ o.order_id }}">
         {% endif %}
     </td>
-
-    <td class="p-6">
-        <span class="text-gray-400 text-[11px]">{{ o.created_at.strftime('%m/%d %H:%M') }}</span><br>
-        <span id="status-{{ o.order_id }}" class="{% if o.status == '결제취소' %}text-red-500{% else %}text-green-600{% endif %} font-black">[{{ o.status }}]</span>
+    <td class="p-5">
+        <span class="text-[#2c2c2c]/50 text-[11px]">{{ o.created_at.strftime('%m/%d %H:%M') }}</span><br>
+        <span id="status-{{ o.order_id }}" class="{% if o.status == '결제취소' %}text-[#2c2c2c]/50{% else %}text-[#c9a962]{% endif %} font-medium">[{{ o.status }}]</span>
     </td>
-
-    <td class="p-6"><b>{{ o.customer_name }}</b><br><span class="text-gray-400">{{ o.customer_phone }}</span></td>
-
-    <td class="p-6 text-gray-500 text-[11px]">{{ o.delivery_address }}</td>
-    <td class="p-6 text-gray-600 font-medium text-[11px]">{{ o.product_details }}</td>
-
-    <td class="p-6 text-right">
+    <td class="p-5"><span class="font-medium text-[#0a0a0a]">{{ o.customer_name }}</span><br><span class="text-[#2c2c2c]/50">{{ o.customer_phone }}</span></td>
+    <td class="p-5 text-[#2c2c2c]/60 text-[11px]">{{ o.delivery_address }}</td>
+    <td class="p-5 text-[#2c2c2c]/70 text-[11px]">{{ o.product_details }}</td>
+    <td class="p-5 text-right">
         {% if o.is_settled %}
             <div class="flex flex-col items-end">
-                <span class="bg-gray-100 text-gray-400 px-3 py-1.5 rounded-full text-[10px] font-black shadow-inner">✅ 정산완료</span>
-                <span class="text-[8px] text-gray-300 mt-1 font-bold">{{ o.settled_at.strftime('%m/%d %H:%M') if o.settled_at else '' }}</span>
+                <span class="border border-black/10 px-3 py-1 text-[10px] font-medium">정산완료</span>
+                <span class="text-[8px] text-[#2c2c2c]/40 mt-1">{{ o.settled_at.strftime('%m/%d %H:%M') if o.settled_at else '' }}</span>
             </div>
         {% else %}
             {% if o.status in ['결제완료', '배송요청', '배송완료'] %}
-                <form action="/admin/settle_order/{{ o.id }}" method="POST" onsubmit="return confirm('입금 승인 처리를 하시겠습니까?');" class="inline">
-                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-[10px] font-black shadow-md hover:bg-blue-700 active:scale-95 transition whitespace-nowrap">
-                        입금완료승인
-                    </button>
+                <form action="/admin/settle_order/{{ o.id }}" method="POST" onsubmit="return confirm('입금 승인?');" class="inline">
+                    <button type="submit" class="border border-[#0a0a0a] text-[#0a0a0a] px-4 py-2 text-[10px] font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition whitespace-nowrap">승인</button>
                 </form>
             {% endif %}
         {% endif %}
@@ -3200,17 +3189,17 @@ def admin_dashboard():
             </div>
 
         {% elif tab == 'reviews' %}
-            <div class="bg-white rounded-[2.5rem] border border-gray-50 shadow-sm overflow-hidden">
+            <div class="border border-black/5 overflow-hidden">
                 <table class="w-full text-left">
-                    <thead class="bg-gray-50 border-b border-gray-100 text-[10px]">
-                        <tr><th class="p-6">상품/작성자</th><th class="p-6">내용</th><th class="p-6 text-center">관리</th></tr>
+                    <thead class="bg-[#faf9f7] border-b border-black/5 text-[10px] text-[#2c2c2c]/60 font-medium">
+                        <tr><th class="p-5">상품/작성자</th><th class="p-5">내용</th><th class="p-5 text-center">관리</th></tr>
                     </thead>
                     <tbody>
                         {% for r in reviews %}
-                        <tr class="border-b border-gray-100 hover:bg-red-50/30">
-                            <td class="p-6"><span class="text-green-600">[{{ r.product_name }}]</span><br><b>{{ r.user_name }}</b></td>
-                            <td class="p-6 text-gray-600 leading-relaxed">{{ r.content }}</td>
-                            <td class="p-6 text-center"><a href="/admin/review/delete/{{ r.id }}" class="text-red-500 underline" onclick="return confirm('삭제?')">삭제</a></td>
+                        <tr class="border-b border-black/5 hover:bg-[#faf9f7]/50 transition">
+                            <td class="p-5"><span class="text-[#c9a962] text-xs">[{{ r.product_name }}]</span><br><span class="font-medium text-[#0a0a0a]">{{ r.user_name }}</span></td>
+                            <td class="p-5 text-[#2c2c2c]/70 leading-relaxed text-sm">{{ r.content }}</td>
+                            <td class="p-5 text-center"><a href="/admin/review/delete/{{ r.id }}" class="text-[#2c2c2c]/50 hover:text-[#0a0a0a] text-xs" onclick="return confirm('삭제?')">삭제</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -3891,34 +3880,47 @@ def admin_product_add():
         main_img = save_uploaded_file(request.files.get('main_image'))
         detail_files = request.files.getlist('detail_images')
         detail_img_url_str = ",".join(filter(None, [save_uploaded_file(f) for f in detail_files if f.filename != '']))
-        new_p = Product(name=request.form['name'], description=request.form['description'], category=cat_name, price=int(request.form['price']), spec=request.form['spec'], origin=request.form['origin'], farmer="최저가 쇼핑몰", stock=int(request.form['stock']), image_url=main_img or "", detail_image_url=detail_img_url_str, deadline=datetime.strptime(request.form['deadline'], '%Y-%m-%dT%H:%M') if request.form.get('deadline') else None, badge=request.form['badge'])
+        new_p = Product(name=request.form['name'], description=request.form['description'], category=cat_name, price=int(request.form['price']), spec=request.form['spec'], origin=request.form['origin'], farmer="DOVE", stock=int(request.form['stock']), image_url=main_img or "", detail_image_url=detail_img_url_str, deadline=datetime.strptime(request.form['deadline'], '%Y-%m-%dT%H:%M') if request.form.get('deadline') else None, badge=request.form['badge'])
         db.session.add(new_p); db.session.commit(); return redirect('/admin')
-    return render_template_string(HEADER_HTML + """<div class="max-w-xl mx-auto py-20 px-6 font-black text-left"><h2 class="text-3xl font-black mb-12 border-l-8 border-green-600 pl-6 uppercase italic text-left">Add Product</h2><form method="POST" enctype="multipart/form-data" class="bg-white p-10 rounded-[3rem] shadow-2xl space-y-7 text-left"><select name="category" class="w-full p-5 bg-gray-50 rounded-2xl font-black outline-none focus:ring-4 focus:ring-green-50 text-left">{% for c in nav_categories %}<option value="{{c.name}}">{{c.name}}</option>{% endfor %}</select>
-   <input name="name" placeholder="상품 명칭 (예: 꿀부사 사과)" class="w-full p-5 bg-gray-50 rounded-2xl font-black text-left text-sm" value="{{ p.name if p else '' }}" required>
-
-<div class="space-y-1">
-    <label class="text-[10px] text-orange-500 font-black ml-4 uppercase tracking-widest">Short Intro (상품명 옆 한줄소개)</label>
-    <input name="badge" placeholder="예: 아삭하고 달콤한, 산지직송" class="w-full p-5 bg-orange-50 border border-orange-100 rounded-2xl font-black text-left text-sm focus:ring-4 focus:ring-orange-100 outline-none transition" value="{{ p.badge if p else '' }}">
-</div>
-
-<div class="space-y-1">
-    <label class="text-[10px] text-green-600 font-black ml-4 uppercase tracking-widest">Detailed Intro (사진 위 노출 문구)</label>
-    <input name="origin" placeholder="상세페이지 사진 바로 위에 노출될 문구" class="w-full p-5 bg-green-50 border border-green-100 rounded-2xl font-black text-left text-sm focus:ring-4 focus:ring-green-100 outline-none transition" value="{{ p.origin if p else '' }}">
-</div>
-
-<div class="space-y-1">
-    <label class="text-[10px] text-blue-600 font-black ml-4 uppercase tracking-widest">Delivery (배송 예정일)</label>
-    <select name="description" class="w-full p-5 bg-blue-50 text-blue-700 rounded-2xl font-black text-sm outline-none border-none focus:ring-4 focus:ring-blue-100">
-        <option value="+1일" {% if p and p.description == '+1일' %}selected{% endif %}>🚚 주문 완료 후 +1일 배송</option>
-        <option value="+2일" {% if p and p.description == '+2일' %}selected{% endif %}>🚚 주문 완료 후 +2일 배송</option>
-        <option value="+3일" {% if p and p.description == '+3일' %}selected{% endif %}>🚚 주문 완료 후 +3일 배송</option>
-        <option value="당일배송" {% if p and p.description == '당일배송' %}selected{% endif %}>⚡ 송도 지역 당일 배송</option>
-    </select>
-</div>
-                                  <div class="grid grid-cols-2 gap-5 text-left"><input name="price" type="number" placeholder="판매 가격(원)" class="p-5 bg-gray-50 rounded-2xl font-black text-left text-sm" required><input name="spec" placeholder="규격 (예: 5kg/1박스)" class="p-5 bg-gray-50 rounded-2xl font-black text-left text-sm"></div><div class="grid grid-cols-2 gap-5 text-left"><input name="stock" type="number" placeholder="재고 수량" class="p-5 bg-gray-50 rounded-2xl font-black text-left text-sm" value="50"><input name="deadline" type="datetime-local" class="p-5 bg-gray-50 rounded-2xl font-black text-left text-sm"></div>
-                                  <div class="space-y-1">
-   
-</div><select name="badge" class="w-full p-5 bg-gray-50 rounded-2xl font-black text-left text-sm"><option value="">노출 뱃지 없음</option><option value="오늘마감">🔥 오늘마감</option><option value="삼촌추천">⭐ 삼촌추천</option></select><div class="p-6 border-2 border-dashed border-gray-100 rounded-3xl text-left"><label class="text-[10px] text-gray-400 uppercase font-black block mb-4 text-left">Main Image (목록 노출)</label><input type="file" name="main_image" class="text-xs text-left"></div><div class="p-6 border-2 border-dashed border-blue-50 rounded-3xl text-left"><label class="text-[10px] text-blue-400 uppercase font-black block mb-4 text-left">Detail Images (상세 내 노출)</label><input type="file" name="detail_images" multiple class="text-xs text-left"></div><button class="w-full bg-green-600 text-white py-6 rounded-3xl font-black text-xl shadow-xl hover:bg-green-700 transition active:scale-95 text-center">상품 등록 완료</button></form></div>""")
+    return render_template_string(HEADER_HTML + """
+    <div class="max-w-xl mx-auto py-16 px-6">
+        <h2 class="text-xl font-medium text-[#0a0a0a] mb-10 tracking-wide border-l-4 border-[#c9a962] pl-4">상품 등록</h2>
+        <form method="POST" enctype="multipart/form-data" class="border border-black/5 p-8 md:p-10 space-y-6">
+            <select name="category" class="w-full p-4 border border-black/10 font-medium text-sm bg-[#faf9f7]" required>{% for c in nav_categories %}<option value="{{c.name}}">{{c.name}}</option>{% endfor %}</select>
+            <input name="name" placeholder="상품명" class="w-full p-4 border border-black/10 font-medium text-sm" required>
+            <input name="origin" placeholder="상세 소개 문구" class="w-full p-4 border border-black/10 font-medium text-sm">
+            <select name="description" class="w-full p-4 border border-black/10 font-medium text-sm bg-[#faf9f7]">
+                <option value="+1일">+1일 배송</option>
+                <option value="+2일">+2일 배송</option>
+                <option value="+3일">+3일 배송</option>
+                <option value="당일배송">당일 배송</option>
+            </select>
+            <select name="badge" class="w-full p-4 border border-black/10 font-medium text-sm bg-[#faf9f7]">
+                <option value="">뱃지 없음</option>
+                <option value="오늘마감">오늘마감</option>
+                <option value="삼촌추천">추천</option>
+            </select>
+            <div class="grid grid-cols-2 gap-4">
+                <input name="price" type="number" placeholder="가격(원)" class="p-4 border border-black/10 font-medium text-sm" required>
+                <input name="spec" placeholder="규격" class="p-4 border border-black/10 font-medium text-sm">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <input name="stock" type="number" placeholder="재고" class="p-4 border border-black/10 font-medium text-sm" value="50">
+                <input name="deadline" type="datetime-local" class="p-4 border border-black/10 font-medium text-sm">
+            </div>
+            <div class="border border-black/10 p-5">
+                <label class="text-[10px] text-[#2c2c2c]/50 uppercase tracking-wider block mb-3">메인 이미지</label>
+                <input type="file" name="main_image" class="text-xs">
+            </div>
+            <div class="border border-black/10 p-5">
+                <label class="text-[10px] text-[#2c2c2c]/50 uppercase tracking-wider block mb-3">상세 이미지 (여러 장)</label>
+                <input type="file" name="detail_images" multiple class="text-xs">
+            </div>
+            <button type="submit" class="w-full border-2 border-[#0a0a0a] text-[#0a0a0a] py-4 font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">등록</button>
+            <a href="/admin" class="block text-center text-[#2c2c2c]/50 text-xs hover:text-[#0a0a0a]">취소</a>
+        </form>
+    </div>
+    """ + FOOTER_HTML)
 
 @app.route('/admin/edit/<int:pid>', methods=['GET', 'POST'])
 @login_required
@@ -3949,97 +3951,42 @@ def admin_product_edit(pid):
         flash("상품 정보가 성공적으로 수정되었습니다.")
         return redirect('/admin')
 
-    # 수정 폼 렌더링 (등록 폼과 디자인 통일)
     return render_template_string(HEADER_HTML + """
-    <div class="max-w-xl mx-auto py-12 md:py-20 px-6 font-black text-left">
-        <h2 class="text-2xl md:text-3xl font-black mb-10 border-l-8 border-blue-600 pl-5 uppercase italic text-gray-800">
-            Edit Product
-        </h2>
-        
-        <form method="POST" enctype="multipart/form-data" class="bg-white p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] shadow-2xl space-y-7 text-left">
-            <div class="space-y-1">
-                <label class="text-[10px] text-gray-400 font-black ml-4 uppercase tracking-widest">Product Name</label>
-                <input name="name" placeholder="상품 명칭 (예: 꿀부사 사과)" 
-                       class="w-full p-5 bg-gray-50 rounded-2xl font-black text-left text-sm focus:ring-4 focus:ring-blue-50 outline-none transition" 
-                       value="{{ p.name }}" required>
+    <div class="max-w-xl mx-auto py-16 px-6">
+        <h2 class="text-xl font-medium text-[#0a0a0a] mb-10 tracking-wide border-l-4 border-[#c9a962] pl-4">상품 수정</h2>
+        <form method="POST" enctype="multipart/form-data" class="border border-black/5 p-8 md:p-10 space-y-6">
+            <input name="name" placeholder="상품명" class="w-full p-4 border border-black/10 font-medium text-sm" value="{{ p.name }}" required>
+            <input name="origin" placeholder="상세 소개 문구" class="w-full p-4 border border-black/10 font-medium text-sm" value="{{ p.origin or '' }}">
+            <select name="description" class="w-full p-4 border border-black/10 font-medium text-sm bg-[#faf9f7]">
+                <option value="+1일" {% if p.description == '+1일' %}selected{% endif %}>+1일 배송</option>
+                <option value="+2일" {% if p.description == '+2일' %}selected{% endif %}>+2일 배송</option>
+                <option value="+3일" {% if p.description == '+3일' %}selected{% endif %}>+3일 배송</option>
+                <option value="당일배송" {% if p.description == '당일배송' %}selected{% endif %}>당일 배송</option>
+            </select>
+            <select name="badge" class="w-full p-4 border border-black/10 font-medium text-sm bg-[#faf9f7]">
+                <option value="" {% if not p.badge %}selected{% endif %}>뱃지 없음</option>
+                <option value="오늘마감" {% if p.badge == '오늘마감' %}selected{% endif %}>오늘마감</option>
+                <option value="삼촌추천" {% if p.badge == '삼촌추천' %}selected{% endif %}>추천</option>
+            </select>
+            <div class="grid grid-cols-2 gap-4">
+                <input name="price" type="number" placeholder="가격(원)" class="p-4 border border-black/10 font-medium text-sm" value="{{ p.price }}" required>
+                <input name="spec" placeholder="규격" class="p-4 border border-black/10 font-medium text-sm" value="{{ p.spec or '' }}">
             </div>
-
-            <div class="space-y-1">
-                <label class="text-[10px] text-orange-500 font-black ml-4 uppercase tracking-widest">Short Intro (상품명 옆 한줄소개)</label>
-                <input name="badge" placeholder="예: 아삭하고 달콤한, 산지직송" 
-                       class="w-full p-5 bg-orange-50 border border-orange-100 rounded-2xl font-black text-left text-sm focus:ring-4 focus:ring-orange-100 outline-none transition" 
-                       value="{{ p.badge or '' }}">
+            <div class="grid grid-cols-2 gap-4">
+                <input name="stock" type="number" placeholder="재고" class="p-4 border border-black/10 font-medium text-sm" value="{{ p.stock }}">
+                <input name="deadline" type="datetime-local" class="p-4 border border-black/10 font-medium text-sm" value="{{ p.deadline.strftime('%Y-%m-%dT%H:%M') if p.deadline else '' }}">
             </div>
-
-            <div class="space-y-1">
-                <label class="text-[10px] text-green-600 font-black ml-4 uppercase tracking-widest">Detailed Intro (사진 위 노출 문구)</label>
-                <input name="origin" placeholder="상세페이지 사진 바로 위에 노출될 문구" 
-                       class="w-full p-5 bg-green-50 border border-green-100 rounded-2xl font-black text-left text-sm focus:ring-4 focus:ring-green-100 outline-none transition" 
-                       value="{{ p.origin or '' }}">
+            <div class="border border-black/10 p-5">
+                <label class="text-[10px] text-[#2c2c2c]/50 uppercase tracking-wider block mb-3">메인 이미지</label>
+                <input type="file" name="main_image" class="text-xs">
+                {% if p.image_url %}<p class="text-[9px] text-[#2c2c2c]/50 mt-2">현재: {{ p.image_url.split('/')[-1] }}</p>{% endif %}
             </div>
-
-            <div class="space-y-1">
-                <label class="text-[10px] text-blue-600 font-black ml-4 uppercase tracking-widest">Delivery (배송 예정일)</label>
-                <select name="description" class="w-full p-5 bg-blue-50 text-blue-700 rounded-2xl font-black text-sm outline-none border-none focus:ring-4 focus:ring-blue-100">
-                    <option value="+1일" {% if p.description == '+1일' %}selected{% endif %}>🚚 주문 완료 후 +1일 배송</option>
-                    <option value="+2일" {% if p.description == '+2일' %}selected{% endif %}>🚚 주문 완료 후 +2일 배송</option>
-                    <option value="+3일" {% if p.description == '+3일' %}selected{% endif %}>🚚 주문 완료 후 +3일 배송</option>
-                    <option value="당일배송" {% if p.description == '당일배송' %}selected{% endif %}>⚡ 송도 지역 당일 배송</option>
-                </select>
+            <div class="border border-black/10 p-5">
+                <label class="text-[10px] text-[#2c2c2c]/50 uppercase tracking-wider block mb-3">상세 이미지 (새로 등록 시 기존 대체)</label>
+                <input type="file" name="detail_images" multiple class="text-xs">
             </div>
-
-            <div class="grid grid-cols-2 gap-5">
-                <div class="space-y-1">
-                    <label class="text-[10px] text-gray-400 font-black ml-4 uppercase tracking-widest">Price (원)</label>
-                    <input name="price" type="number" placeholder="판매 가격" 
-                           class="w-full p-5 bg-gray-50 rounded-2xl font-black text-left text-sm outline-none" 
-                           value="{{ p.price }}" required>
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[10px] text-gray-400 font-black ml-4 uppercase tracking-widest">Spec (규격)</label>
-                    <input name="spec" placeholder="예: 5kg/1박스" 
-                           class="w-full p-5 bg-gray-50 rounded-2xl font-black text-left text-sm outline-none" 
-                           value="{{ p.spec or '' }}">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-5">
-                <div class="space-y-1">
-                    <label class="text-[10px] text-gray-400 font-black ml-4 uppercase tracking-widest">Stock (재고)</label>
-                    <input name="stock" type="number" placeholder="재고 수량" 
-                           class="w-full p-5 bg-gray-50 rounded-2xl font-black text-left text-sm outline-none" 
-                           value="{{ p.stock }}">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-[10px] text-red-400 font-black ml-4 uppercase tracking-widest">Deadline (마감)</label>
-                    <input name="deadline" type="datetime-local" 
-                           class="w-full p-5 bg-gray-50 rounded-2xl font-black text-left text-sm outline-none" 
-                           value="{{ p.deadline.strftime('%Y-%m-%dT%H:%M') if p.deadline else '' }}">
-                </div>
-            </div>
-
-            <div class="pt-4 space-y-4">
-                <div class="p-6 border-2 border-dashed border-gray-100 rounded-3xl">
-                    <label class="text-[10px] text-gray-400 uppercase font-black block mb-3">Main Image (기존 이미지 유지 가능)</label>
-                    <input type="file" name="main_image" class="text-[10px] font-bold">
-                    {% if p.image_url %}
-                    <p class="text-[9px] text-blue-500 mt-2 font-bold italic">현재 등록됨: {{ p.image_url.split('/')[-1] }}</p>
-                    {% endif %}
-                </div>
-                
-                <div class="p-6 border-2 border-dashed border-blue-50 rounded-3xl">
-                    <label class="text-[10px] text-blue-400 uppercase font-black block mb-3">Detail Images (새로 등록 시 기존파일 대체)</label>
-                    <input type="file" name="detail_images" multiple class="text-[10px] font-bold">
-                </div>
-            </div>
-
-            <button type="submit" class="w-full bg-blue-600 text-white py-6 rounded-3xl font-black text-xl shadow-xl hover:bg-blue-700 transition active:scale-95 text-center">
-                상품 정보 수정 완료
-            </button>
-            
-            <div class="text-center mt-4">
-                <a href="/admin" class="text-gray-300 text-xs font-bold hover:text-gray-500 transition">수정 취소하고 돌아가기</a>
-            </div>
+            <button type="submit" class="w-full border-2 border-[#0a0a0a] text-[#0a0a0a] py-4 font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">수정 완료</button>
+            <a href="/admin" class="block text-center text-[#2c2c2c]/50 text-xs hover:text-[#0a0a0a]">취소</a>
         </form>
     </div>
     """ + FOOTER_HTML, p=p)
@@ -4072,7 +4019,31 @@ def admin_category_edit(cid):
         cat.biz_name, cat.biz_representative, cat.biz_reg_number, cat.biz_address, cat.biz_contact, cat.seller_inquiry_link = request.form.get('biz_name'), request.form.get('biz_representative'), request.form.get('biz_reg_number'), request.form.get('biz_address'), request.form.get('biz_contact'), request.form.get('seller_link')
         cat.seller_name = cat.biz_name
         db.session.commit(); return redirect('/admin?tab=categories')
-    return render_template_string(HEADER_HTML + """<div class="max-w-xl mx-auto py-20 px-6 font-black text-left"><h2 class="text-2xl md:text-3xl font-black mb-12 tracking-tighter uppercase text-green-600 text-left">Edit Category Profile</h2><form method="POST" class="bg-white p-10 rounded-[3rem] shadow-2xl space-y-8 text-left"><div><label class="text-[10px] text-gray-400 uppercase font-black ml-4 text-left">Settings</label><input name="cat_name" value="{{cat.name}}" class="border border-gray-100 p-5 rounded-2xl w-full font-black mt-2 text-sm text-left" required><textarea name="description" class="border border-gray-100 p-5 rounded-2xl w-full h-24 font-black mt-3 text-sm text-left" placeholder="한줄 소개">{{cat.description or ''}}</textarea><input name="manager_email" value="{{cat.manager_email or ''}}" class="border border-gray-100 p-5 rounded-2xl w-full font-black mt-3 text-sm text-left" placeholder="매니저 이메일"><select name="tax_type" class="border border-gray-100 p-5 rounded-2xl w-full font-black mt-3 text-sm text-left bg-white"><option value="과세" {% if cat.tax_type == '과세' %}selected{% endif %}>과세</option><option value="면세" {% if cat.tax_type == '면세' %}selected{% endif %}>면세</option></select></div><div class="border-t border-gray-50 pt-10 space-y-4 text-left"><label class="text-[10px] text-green-600 uppercase font-black ml-4 text-left">Business Info</label><input name="biz_name" value="{{cat.biz_name or ''}}" class="border border-gray-100 p-4 rounded-xl w-full font-black text-xs text-left" placeholder="상호명"><input name="biz_representative" value="{{cat.biz_representative or ''}}" class="border border-gray-100 p-4 rounded-xl w-full font-black text-xs text-left" placeholder="대표자"><input name="biz_reg_number" value="{{cat.biz_reg_number or ''}}" class="border border-gray-100 p-4 rounded-xl w-full font-black text-xs text-left" placeholder="사업자번호"><input name="biz_address" value="{{cat.biz_address or ''}}" class="border border-gray-100 p-4 rounded-xl w-full font-black text-xs text-left" placeholder="주소"><input name="biz_contact" value="{{cat.biz_contact or ''}}" class="border border-gray-100 p-4 rounded-xl w-full font-black text-xs text-left" placeholder="고객센터"><input name="seller_link" value="{{cat.seller_inquiry_link or ''}}" class="border border-gray-100 p-4 rounded-xl w-full font-black text-xs text-left" placeholder="문의 링크 URL"></div><button class="w-full bg-blue-600 text-white py-6 rounded-3xl font-black shadow-xl hover:bg-blue-700 transition text-center text-center">Save Profile Updates</button></form></div>""", cat=cat)
+    return render_template_string(HEADER_HTML + """
+    <div class="max-w-xl mx-auto py-16 px-6">
+        <h2 class="text-xl font-medium text-[#0a0a0a] mb-10 tracking-wide border-l-4 border-[#c9a962] pl-4">카테고리 수정</h2>
+        <form method="POST" class="border border-black/5 p-8 md:p-10 space-y-6">
+            <input name="cat_name" value="{{cat.name}}" class="w-full p-4 border border-black/10 font-medium text-sm" required>
+            <textarea name="description" class="w-full p-4 border border-black/10 font-medium text-sm h-24" placeholder="설명">{{cat.description or ''}}</textarea>
+            <input name="manager_email" value="{{cat.manager_email or ''}}" class="w-full p-4 border border-black/10 font-medium text-sm" placeholder="매니저 이메일">
+            <select name="tax_type" class="w-full p-4 border border-black/10 font-medium text-sm bg-[#faf9f7]">
+                <option value="과세" {% if cat.tax_type == '과세' %}selected{% endif %}>과세</option>
+                <option value="면세" {% if cat.tax_type == '면세' %}selected{% endif %}>면세</option>
+            </select>
+            <div class="border-t border-black/5 pt-8 space-y-4">
+                <p class="text-[10px] text-[#c9a962] uppercase tracking-wider">사업자 정보</p>
+                <input name="biz_name" value="{{cat.biz_name or ''}}" class="w-full p-4 border border-black/10 font-medium text-xs" placeholder="상호명">
+                <input name="biz_representative" value="{{cat.biz_representative or ''}}" class="w-full p-4 border border-black/10 font-medium text-xs" placeholder="대표자">
+                <input name="biz_reg_number" value="{{cat.biz_reg_number or ''}}" class="w-full p-4 border border-black/10 font-medium text-xs" placeholder="사업자번호">
+                <input name="biz_address" value="{{cat.biz_address or ''}}" class="w-full p-4 border border-black/10 font-medium text-xs" placeholder="주소">
+                <input name="biz_contact" value="{{cat.biz_contact or ''}}" class="w-full p-4 border border-black/10 font-medium text-xs" placeholder="고객센터">
+                <input name="seller_link" value="{{cat.seller_inquiry_link or ''}}" class="w-full p-4 border border-black/10 font-medium text-xs" placeholder="문의 링크">
+            </div>
+            <button type="submit" class="w-full border-2 border-[#0a0a0a] text-[#0a0a0a] py-4 font-medium hover:bg-[#0a0a0a] hover:text-[#faf9f7] transition">저장</button>
+            <a href="/admin?tab=categories" class="block text-center text-[#2c2c2c]/50 text-xs hover:text-[#0a0a0a]">취소</a>
+        </form>
+    </div>
+    """ + FOOTER_HTML, cat=cat)
 
 @app.route('/admin/category/move/<int:cid>/<string:direction>')
 @login_required
@@ -4186,7 +4157,7 @@ def admin_orders_excel():
         df.to_excel(w, index=False)
     
     out.seek(0)
-    filename = f"최저가 쇼핑몰_주문정산_{datetime.now().strftime('%m%d_%H%M')}.xlsx"
+    filename = f"DOVE_주문정산_{datetime.now().strftime('%m%d_%H%M')}.xlsx"
     return send_file(out, download_name=filename, as_attachment=True)
     # 데이터프레임 생성 및 열 순서 정리
     df = pd.DataFrame(data)
@@ -4216,7 +4187,7 @@ def admin_orders_excel():
     out.seek(0)
     
     # 파일명 한글 깨짐 방지 인코딩
-    filename = f"최저가 쇼핑몰_주문데이터_{datetime.now().strftime('%m%d_%H%M')}.xlsx"
+    filename = f"DOVE_주문데이터_{datetime.now().strftime('%m%d_%H%M')}.xlsx"
     encoded_filename = quote(filename)
     
     response = send_file(
@@ -4261,7 +4232,7 @@ def init_db():
                     name=cat_name,
                     order=i,
                     description=desc,
-                    biz_name="COLLECTION",
+                    biz_name="DOVE",
                     biz_contact="1666-8320",
                     tax_type="과세"
                 )
@@ -4323,7 +4294,7 @@ def init_db():
                         spec=random.choice(["Free", "S", "M", "L", "XL", "S~M", "M~L", "One Size"]),
                         description="무료배송",
                         origin="국내",
-                        farmer="COLLECTION",
+                        farmer="DOVE",
                         stock=random.randint(5, 50),
                         image_url=img_main,
                         detail_image_url=detail_str,
