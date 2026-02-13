@@ -1,21 +1,13 @@
 {
-  "name": "바구니 삼촌 - 송도 최저가 쇼핑몰",
-  "short_name": "바구니삼촌",
-  "description": "인천 송도 전용 신개념 6PL 구매대행 및 배송 서비스",
+  "name": "DOVE - 프리미엄 의류 쇼핑몰",
+  "short_name": "DOVE",
+  "description": "순수한 순간을 담다. 감각적인 디자인과 완벽한 품질의 프리미엄 패션",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#059669",
+  "background_color": "#faf9f7",
+  "theme_color": "#0a0a0a",
   "icons": [
-    {
-      "src": "/static/logo/side1.jpg",
-      "sizes": "192x192",
-      "type": "image/jpeg"
-    },
-    {
-      "src": "/static/logo/side1.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg"
-    }
+    {"src": "/static/logo/side1.jpg", "sizes": "192x192", "type": "image/jpeg"},
+    {"src": "/static/logo/side1.jpg", "sizes": "512x512", "type": "image/jpeg"}
   ]
 }

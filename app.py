@@ -710,10 +710,10 @@ FOOTER_HTML = """
 
         const UNCLE_TERMS = {
     'terms': {
-        'title': '최저가 쇼핑몰 서비스 이용약관',
+        'title': 'DOVE 서비스 이용약관',
         'content': `
             <b>제1조 (목적)</b><br>
-            본 약관은 최저가 쇼핑몰(이하 “회사”)이 제공하는 구매대행 및 물류·배송 관리 서비스의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.<br><br>
+            본 약관은 (주)DOVE(이하 “회사”)이 제공하는 구매대행 및 물류·배송 관리 서비스의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.<br><br>
             <b>제2조 (서비스의 성격 및 정의)</b><br>
             ① 회사는 이용자의 요청에 따라 상품을 대신 구매하고, 결제, 배송 관리, 고객 응대, 환불 처리 등 거래 전반을 회사가 직접 관리·운영하는 구매대행 서비스를 제공합니다.<br>
             ② 본 서비스는 <b>통신판매중개업(오픈마켓)이 아니며</b>, 회사가 거래 및 운영의 주체로서 서비스를 제공합니다.<br><br>
@@ -839,7 +839,7 @@ function openUncleModal(type) {
       title: '이용약관',
       content: `
       <p><strong>제1조 (목적)</strong><br>
-      본 약관은 최저가 쇼핑몰(이하 "회사")이 제공하는 구매대행 및 배송 중개 서비스의 이용과 관련하여
+      본 약관은 (주)DOVE(이하 "회사")이 제공하는 구매대행 및 배송 중개 서비스의 이용과 관련하여
       회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.</p>
 
       <p><strong>제2조 (서비스의 정의)</strong><br>
@@ -891,7 +891,7 @@ function openUncleModal(type) {
       title: '이용안내',
       content: `
       <p><strong>서비스 안내</strong><br>
-      최저가 쇼핑몰은 상품을 직접 보유하거나 판매하지 않는
+      DOVE는 상품을 직접 보유하거나 판매하지 않는
       구매대행 및 배송 중개 플랫폼입니다.</p>
 
       <p><strong>주문 절차</strong><br>
@@ -1093,7 +1093,7 @@ def admin_order_print():
             {% for o in orders %}
             <div class="invoice-card">
                 <div class="flex justify-between items-center border-b-4 border-black pb-2 mb-3">
-                    <h1 class="text-2xl font-black tracking-tighter text-green-700 italic">최저가 쇼핑몰</h1>
+                    <h1 class="text-2xl font-black tracking-tighter text-[#0a0a0a] italic tracking-[0.15em]">DOVE</h1>
                     <p class="text-[11px] font-black bg-black text-white px-3 py-1 rounded">송도 전용 배송</p>
                 </div>
 
@@ -1346,7 +1346,7 @@ def index():
 
 @app.route('/about')
 def about_page():
-    """제공된 HTML 형식을 반영한 최저가 쇼핑몰 브랜드 소개 페이지"""
+    """DOVE 브랜드 소개 페이지"""
     content = """
     <style>
         /* 소개 페이지 전용 스타일 */
@@ -1507,9 +1507,9 @@ def about_page():
 
     <div class="about-body">
         <div class="about-container">
-    <h1>바구니 삼촌몰</h1>
+    <h1 class="font-serif tracking-[0.2em]">DOVE</h1>
     <p>
-        바구니 삼촌몰은 <span class="about-highlight">물류 인프라를 직접 운영하며 주문 전 과정을 책임지는 구매대행 서비스</span>입니다.
+        DOVE는 <span class="about-highlight">물류 인프라를 직접 운영하며 주문 전 과정을 책임지는 구매대행 서비스</span>입니다.
     </p>
     <p>
         우리는 기존 유통의 불필요한 단계를 제거하기 위해 <b>상품 대리 구매 · 직영 물류 · 라스트마일 배송</b>을 하나의 시스템으로 통합했습니다.
@@ -1534,7 +1534,7 @@ def about_page():
     </div>
 
     <p style="margin-top: 60px; font-size: 19px; font-weight: 700; border-left: 4px solid #10b981; padding-left: 20px;">
-        바구니 삼촌은 중개만 하는 장터가 아니라, <br>
+        DOVE는 중개만 하는 장터가 아니라, <br>
         <span class="about-highlight">‘구매부터 배송까지 당사가 직접 책임지고 완료하는 대행 플랫폼’</span>입니다.
     </p>
 
@@ -1991,7 +1991,7 @@ def seller_info_page(cid):
             </div>
             
             <div class="bg-gray-50 p-8 text-center border-t border-gray-100 text-[11px] text-gray-400 font-black uppercase tracking-[0.5em] text-center">
-                바구니 삼촌 Premium Service
+                DOVE Premium Service
             </div>
         </div>
     </div>"""
@@ -2034,7 +2034,7 @@ def register():
         
         # 송도동 체크
         if "송도동" not in (addr or ""):
-            flash("최저가 쇼핑몰은 현재 송도동 지역 전용 서비스입니다. 배송지 주소를 확인해주세요."); return redirect('/register')
+            flash("DOVE는 현재 송도동 지역 전용 서비스입니다. 배송지 주소를 확인해주세요."); return redirect('/register')
 
         if not request.form.get('consent_e_commerce'):
             flash("전자상거래 이용 약관 및 유의사항에 동의해야 합니다."); return redirect('/register')
@@ -2098,7 +2098,7 @@ def update_address():
     ent_pw = request.form.get('entrance_pw')
 
     if not addr or "송도동" not in addr:
-        flash("최저가 쇼핑몰은 송도 전용 서비스입니다. 주소에 '송도동'이 포함되어야 합니다. 😊")
+        flash("DOVE는 송도 전용 서비스입니다. 주소에 '송도동'이 포함되어야 합니다. 😊")
         return redirect(url_for('mypage'))
 
     try:
@@ -3835,7 +3835,7 @@ def admin_product_bulk_upload():
                 price=int(row['가격']), 
                 spec=str(row['규격']), 
                 origin="국산", 
-                farmer="최저가 쇼핑몰", 
+                farmer="DOVE", 
                 stock=50, # 기본 재고 50개 설정
                 image_url=img_url, 
                 detail_image_url=img_url, # 메인과 상세 동일하게 복사
